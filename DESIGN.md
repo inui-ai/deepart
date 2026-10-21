@@ -94,8 +94,8 @@ markers. One committed theme (light). One accent, used rarely and semantically.
 - Hover treatments, one per role: primary button = ink→lime flood (fill wipes left→right,
   text stays ink; a real treatment, not colorOnly); gallery plate = image un-blurs to 0 and
   its spec line writes in; nav = inner-span roll; utility links = color only.
-- Idle state: hero plate carries a barely-visible noise shimmer (opacity .02→.05 pulse,
-  ~7s loop) so the sampler keeps breathing; pause when off screen. **Decision, not accident.**
+- Idle state: hero plate carries a barely-visible noise shimmer (opacity .05→.22 pulse,
+  ~6s loop) so the sampler keeps breathing; pause when off screen. **Decision, not accident.**
 - Reduced motion: no Lenis, no scroll tweens, no signature choreography, no shimmer; all
   content fully visible immediately (resolve = simple 150ms opacity).
 
@@ -114,6 +114,9 @@ hero (split frame):
   | [Generate] [Browsing the wall]   |        UTILITY NAV  |
   | ... [GLance at the immediate ACT]        |
   | [Generate            ] | [View the wall]
+
+  Phones: the columns stack with the plate FIRST (poster above type) so the first
+  paint and the LCP are the render itself, not the copy.
 
   corner frame: TL DeepArt - TR Nav (Generate/Wall/Admin) - BL context label - BR action
   (small screens: top bar + menu overlay)

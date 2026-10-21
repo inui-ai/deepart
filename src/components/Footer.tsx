@@ -7,9 +7,16 @@ export function Footer() {
       <p className="footer__word">{site.name}</p>
       <div className="footer__row">
         <nav aria-label="Footer" className="footer__links">
-          <Link href="/generate">Generate</Link>
-          <Link href="/#wall">The wall</Link>
-          <Link href="/admin">Admin</Link>
+          {[
+            { label: 'Generate', href: '/generate' },
+            { label: 'The wall', href: '/#wall' },
+            { label: 'Admin', href: '/admin' },
+          ].map((item) => (
+            <Link key={item.href} className="roll footer__link" href={item.href}>
+              <span>{item.label}</span>
+              <span aria-hidden="true">{item.label}</span>
+            </Link>
+          ))}
         </nav>
         <p className="footer__colophon">Switzer &amp; Fragment Mono. Renders by Pollinations.</p>
       </div>

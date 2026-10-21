@@ -28,7 +28,6 @@ export async function runLoader(): Promise<void> {
     return finish(root);
   }
   const count = root.querySelector<HTMLElement>('[data-loader-count]');
-  const bar = root.querySelector<HTMLElement>('[data-loader-bar]');
   const tasks = criticalAssets();
   let done = 0;
   const shown = { v: 0 };
@@ -44,7 +43,6 @@ export async function runLoader(): Promise<void> {
       shown.v += (goal - shown.v) * 0.12;
       if (goal === 100 && shown.v > 99.5) shown.v = 100;
       if (count) count.textContent = format(shown.v);
-      if (bar) bar.style.transform = `scaleX(${shown.v / 100})`;
       if (shown.v === 100) { gsap.ticker.remove(tick); resolve(); }
     };
     gsap.ticker.add(tick);

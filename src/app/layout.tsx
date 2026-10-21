@@ -4,7 +4,7 @@ import { Footer } from '@/components/Footer';
 import { Motion } from '@/components/Motion';
 import { StoreSync } from '@/components/StoreSync';
 import { Toaster } from '@/components/Toaster';
-import { site } from '@/data/site';
+import { HERO_PROMPT, pollUrl, seedStore, site } from '@/data/site';
 import { switzer, fragment } from './fonts';
 import './globals.css';
 
@@ -24,6 +24,10 @@ export const metadata: Metadata = {
 // Runs before first paint: hidden-until-revealed styles only apply when JS and motion are on.
 const flags = `document.documentElement.classList.add('js');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('motion')`;
 
+// Warm-cache hint for the hero render: the seeded URL is a fixed key the sampler serves
+// from its cache, so discovery starts at connection time, not image-parse time.
+const heroPreload = pollUrl(HERO_PROMPT, seedStore.hero.seed, 1000, 1200);
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
@@ -39,6 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${switzer.variable} ${fragment.variable}`} suppressHydrationWarning>
       <head>
+        <link rel="preload" as="image" href={heroPreload} fetchPriority="high" />
         <script dangerouslySetInnerHTML={{ __html: flags }} />
       </head>
       <body>
@@ -55,7 +60,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <span className="loader__name" data-loader-out>{site.name}</span>
             <span className="loader__count" data-loader-out data-loader-count>00/14</span>
           </div>
-          <div className="loader__bar" data-loader-bar />
           <span className="loader__flash" aria-hidden="true" />
         </div>
         <Header />

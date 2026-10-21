@@ -8,13 +8,14 @@
 const POLL = 'https://image.pollinations.ai/prompt';
 
 export function pollUrl(prompt: string, seed: number, w: number, h: number, model = 'flux') {
-  return `${POLL}/${encodeURIComponent(prompt)}?width=${w}&height=${h}&seed=${seed}&model=${model}&nologo=true`;
+  // NOTE: no nologo param. The anonymous Pollinations tier rejects it with 402.
+  return `${POLL}/${encodeURIComponent(prompt)}?width=${w}&height=${h}&seed=${seed}&model=${model}`;
 }
 
 export const site = {
   name: 'DeepArt',
   action: 'Generate',
-  url: 'https://deepart.local', // placeholder: production URL used for canonical, OG and sitemap
+  url: 'http://127.0.0.1:4400', // ship placeholder: the QA/ship host, used for canonical, OG and sitemap. Replace on real deploy.
   description:
     'DeepArt is a browser-native image sampler: type a few words, pick a model, watch the render resolve. No login, no account, everything stays on your machine.',
   year: new Date().getFullYear(),
@@ -71,7 +72,7 @@ const defaultModels: Model[] = [
     id: 'm-flux',
     name: 'Flux',
     slug: 'flux',
-    endpoint: `${POLL}/{prompt}?width={width}&height={height}&seed={seed}&model=flux&nologo=true`,
+    endpoint: `${POLL}/{prompt}?width={width}&height={height}&seed={seed}&model=flux`,
     enabled: true,
     builtIn: true,
   },
@@ -79,8 +80,8 @@ const defaultModels: Model[] = [
     id: 'm-turbo',
     name: 'Turbo',
     slug: 'turbo',
-    endpoint: `${POLL}/{prompt}?width={width}&height={height}&seed={seed}&model=turbo&nologo=true`,
-    enabled: true,
+    endpoint: `${POLL}/{prompt}?width={width}&height={height}&seed={seed}&model=turbo`,
+    enabled: false, // the Pollinations anonymous tier is Flux-only now; admins with a paid key can turn this on
     builtIn: true,
   },
 ];

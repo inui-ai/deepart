@@ -3,16 +3,17 @@
 // The hero plate joins the page intro and resolves from noise once the loader is done.
 import Link from 'next/link';
 import { pollUrl, site, type HeroContent } from '@/data/site';
+import { retryableImgError } from '@/lib/img';
 import { useStore } from '@/lib/store';
 
 export function Hero({ hero }: { hero: HeroContent }) {
-  const src = pollUrl('lime green light through fog over a dark harbor, long exception, fine grain'.replace('exception', 'exposure'), hero.seed, 1000, 1200);
+  const src = pollUrl('lime green light through fog over a dark harbor, long exposure, fine grain', hero.seed, 1000, 1200);
 
   return (
     <section className="hero" aria-labelledby="hero-title">
       <div className="hero__copy">
-        <p className="hero__eyebrow">{hero.eyebrow}</p>
-        <h1 id="hero-title" className="hero__title" data-split="lines" data-intro>
+        <p className="hero__eyebrow" data-reveal="fade" data-intro data-delay="0.2">{hero.eyebrow}</p>
+        <h1 id="hero-title" className="hero__title">
           {hero.headline}
         </h1>
         <p className="hero__sub" data-reveal="fade" data-intro data-delay="0.35">
@@ -31,7 +32,7 @@ export function Hero({ hero }: { hero: HeroContent }) {
       </div>
       <figure className="plate hero__plate" data-resolve data-intro>
         <div className="plate__media plate__media--tall">
-          <img src={src} alt="A fogged harbor under lime light, one of the seeded renders" width={1000} height={1200} fetchPriority="high" decoding="async" />
+          <img src={src} alt="A fogged harbor under lime light, one of the seeded renders" width={1000} height={1200} fetchPriority="high" decoding="async" onError={retryableImgError(3)} />
           <div className="plate__noise" aria-hidden="true" />
           <div className="plate__flash" aria-hidden="true" />
         </div>

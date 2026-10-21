@@ -3,6 +3,7 @@
 // (focus lands on the close button, Escape closes, scrolling stops while it is open).
 import { useEffect, useRef, useState } from 'react';
 import { startScroll, stopScroll } from '@/engine';
+import { retryableImgError } from '@/lib/img';
 import type { GalleryItem } from '@/data/site';
 import { useStore } from '@/lib/store';
 
@@ -17,6 +18,7 @@ function specOf(item: GalleryItem, index: number) {
 export function Wall() {
   const s = useStore();
   const items = s.gallery;
+  const rootRef = useRef<HTMLElement>(null);
   const [open, setOpen] = useState<number | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -29,10 +31,49 @@ export function Wall() {
     return () => { document.removeEventListener('keydown', onKey); startScroll(); };
   }, [open]);
 
+  // The wall queues its renders: two plates fetch at a time as they scroll into range,
+  // so a first-ever visit paces its requests instead of racing the sampler's limiter.
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    let pending = 0;
+    const waiting: (() => void)[] = [];
+    const MAX = 2;
+    const pump = () => {
+      if (pending >= MAX || waiting.length === 0) return;
+      pending += 1;
+      waiting.shift()!();
+    };
+    const load = (img: HTMLImageElement) => {
+      waiting.push(() => {
+        const settle = () => { pending -= 1; pump(); };
+        img.addEventListener('load', settle, { once: true });
+        img.addEventListener('error', settle, { once: true });
+        img.src = img.dataset.src ?? '';
+      });
+      pump();
+    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          io.unobserve(entry.target);
+          const img = entry.target as HTMLImageElement;
+          if (!img.src) load(img);
+        }
+      },
+      { rootMargin: '480px 0px' },
+    );
+    root.querySelectorAll<HTMLImageElement>('img[data-src]').forEach((img) => {
+      if (!img.src) io.observe(img);
+    });
+    return () => io.disconnect();
+  }, [items]);
+
   const current = open != null ? items[open] : null;
 
   return (
-    <section id="wall" className="wall" aria-labelledby="wall-title">
+    <section id="wall" className="wall" aria-labelledby="wall-title" ref={rootRef}>
       <header className="wall__head" data-reveal="up">
         <h2 id="wall-title" className="wall__title">The wall</h2>
         <p className="wall__meta" aria-label={`${items.length} plates on the wall`}>
@@ -57,7 +98,7 @@ export function Wall() {
                 data-cursor="View"
               >
                 <span className="plate__media">
-                  <img src={item.url} alt={item.title} loading="lazy" decoding="async" width={768} height={768} />
+                  <img data-src={item.url} alt={item.title} decoding="async" width={768} height={768} onError={retryableImgError(2)} />
                   <span className="plate__noise" aria-hidden="true" />
                   <span className="plate__flash" aria-hidden="true" />
                 </span>
@@ -76,7 +117,7 @@ export function Wall() {
           <button ref={closeRef} type="button" className="lightbox__close" onClick={() => setOpen(null)}>
             Close
           </button>
-          <img src={current.url} alt={current.title} decoding="async" fetchPriority="high" />
+          <img src={current.url} alt={current.title} decoding="async" fetchPriority="high" onError={retryableImgError(3)} />
           <p className="plate__spec">{specOf(current, open ?? 0)}</p>
         </div>
       ) : null}

@@ -52,11 +52,7 @@ html.lenis, html.lenis body { height: auto; }
 #main, [data-layer='content'] { position: relative; z-index: var(--z-content); }
 
 /* Hidden-until-revealed (only when motion is allowed and JS runs) */
-.motion [data-split], .motion [data-reveal] { visibility: hidden; }
-.split-line { padding-bottom: 0.08em; margin-bottom: -0.08em; } /* descender room inside masks */
-/* SplitText turns each line into a block: keep text-indent on the first line only. */
-[data-split] > *, [data-split] > * > * { text-indent: 0; }
-[data-split] > :first-child, [data-split] > :first-child > :first-child { text-indent: inherit; }
+.motion [data-reveal] { visibility: hidden; }
 
 /* Curtain (page transitions) */
 #curtain { position: fixed; inset: 0; z-index: var(--z-curtain); pointer-events: none; visibility: hidden; overflow: hidden; }
@@ -89,7 +85,6 @@ html.lenis, html.lenis body { height: auto; }
 }
 .loader__inner { display: flex; justify-content: space-between; align-items: end; overflow: hidden; }
 .loader__count { font-variant-numeric: tabular-nums; }
-.loader__bar { height: 1px; margin-top: calc(var(--u) * 1.5); background: var(--c-accent); transform: scaleX(0); transform-origin: left; }
 html:not(.js) #loader, #loader[hidden] { display: none; }
 
 @media (prefers-reduced-motion: reduce) {

@@ -125,7 +125,20 @@ export function Generate() {
   }
 
   function onImgError() {
-    if (status !== 'loading') return;
+    if (status !== 'loading' || !imgRef.current) return;
+    // The free Pollinations tier allows one fresh render per ~45 s (HTTP 402 otherwise);
+    // a retry on the exact URL usually lands once the limiter cools.
+    const img = imgRef.current;
+    const n = Number(img.dataset.retryN ?? '0');
+    const waits = [8000, 22000];
+    if (n < waits.length) {
+      img.dataset.retryN = String(n + 1);
+      window.setTimeout(() => {
+        img.src = '';
+        img.src = active?.url ?? '';
+      }, waits[n]);
+      return; // stay in the loading state; the ticker keeps sampling
+    }
     stopTicker();
     setStatus('error');
     toast('The sampler did not converge. Retry with a new seed.', 'error');
@@ -168,6 +181,7 @@ export function Generate() {
         onSubmit={(e) => { e.preventDefault(); run(); }}
         aria-label="Generate an image"
       >
+        <h1 className="gen__h1">The sampler.</h1>
         <div className="gen__field">
           <label htmlFor="prompt">Prompt</label>
           <textarea
@@ -250,6 +264,8 @@ export function Generate() {
               ref={imgRef}
               src={active?.url}
               alt={status === 'done' && active ? active.prompt.slice(0, 120) : ''}
+              width={1024}
+              height={1024}
               onLoad={onImgLoad}
               onError={onImgError}
               decoding="async"

@@ -28,9 +28,9 @@ export function Toggle({ on, onClick, children }: { on: boolean; onClick: () => 
   );
 }
 
-export function QuietBtn({ children, ...rest }: { children: ReactNode } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
+export function QuietBtn({ className, children, ...rest }: { className?: string; children: ReactNode } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
-    <button type="button" className="adm__btn" {...rest}>
+    <button type="button" className={`adm__btn${className ? ` ${className}` : ''}`} {...rest}>
       {children}
     </button>
   );

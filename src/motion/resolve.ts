@@ -22,14 +22,14 @@ export function resolveIn(plate: HTMLElement, all: ResolveOpts = undefined) {
   const noise = plate.querySelector<HTMLElement>('.plate__noise');
   const flash = plate.querySelector<HTMLElement>('.plate__flash');
 
-  const done = () => { gsap.set(plate, { 'data-resolved': 'true' }); };
+  const done = () => { plate.setAttribute('data-resolved', 'true'); };
   if (prefersReducedMotion()) {
     gsap.set(noise, { autoAlpha: 0 });
     if (img) gsap.set(img, { filter: 'none', scale: 1 });
     done();
     return gsap.timeline({ paused: true });
   }
-  gsap.set(plate, { 'data-resolved': 'false' });
+  plate.setAttribute('data-resolved', 'false');
   const tl = gsap.timeline({ paused: true, onComplete: done });
   tl.saveRevert && tl.saveRevert();
   if (img) {
@@ -51,21 +51,30 @@ export function resolveIn(plate: HTMLElement, all: ResolveOpts = undefined) {
 }
 
 /** Wire every [data-resolve] inside root. data-intro plates join the page intro; the rest
- *  resolve once on scroll enter. */
+ *  resolve once on scroll enter. Queue-fed plates hold their resolve until their img
+ *  actually lands (the hatch reads as sampling in the meantime; a 6 s cap keeps it moving). */
+function playWhenLoaded(plate: HTMLElement, tl: gsap.core.Timeline) {
+  const img = plate.querySelector<HTMLImageElement>('img');
+  if (!img || (img.complete && img.naturalWidth > 0)) { tl.play(); return; }
+  const go = () => { clearTimeout(cap); tl.play(); };
+  const cap = setTimeout(go, 6000);
+  img.addEventListener('load', go, { once: true });
+  img.addEventListener('error', go, { once: true });
+}
+
 export function initResolves(root: ParentNode = document, intro?: gsap.core.Timeline) {
   if (prefersReducedMotion()) return;
   root.querySelectorAll<HTMLElement>('[data-resolve]').forEach((plate) => {
     if (plate.dataset.resolveWired) return;
     plate.dataset.resolveWired = '1';
     const tl = resolveIn(plate);
-    if (plate.hasAttribute('data-intro') && intro) intro.add(() => tl.play(), 0.05);
+    if (plate.hasAttribute('data-intro') && intro) playWhenLoaded(plate, tl);
     else {
-      plate.style.setProperty('--plate-paused', '1');
       ScrollTrigger.create({
         trigger: plate,
         start: 'top 88%',
         once: true,
-        onEnter: () => tl.play(),
+        onEnter: () => playWhenLoaded(plate, tl),
       });
     }
   });

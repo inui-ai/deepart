@@ -21,7 +21,8 @@ export default function NotFound() {
         <Link className="link" href="/">wall</Link>, the <Link className="link" href="/generate">sampler</Link> and{' '}
         <Link className="link" href="/admin">admin</Link>.
       </p>
-      <Link href="/" className="btn btn--solid" data-no-transition>
+      <Link href="/" className="btn btn--solid" data-fill data-no-transition>
+        <span aria-hidden="true" className="btn__fill" />
         Back to the wall
       </Link>
     </section>
