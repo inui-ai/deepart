@@ -1,0 +1,136 @@
+// Assumptions (marked everywhere said, mirrored in the final message):
+// - The brand name "DeepArt" comes from the project folder; the owner can change it here and in /admin.
+// - The production URL is a placeholder (https://deepart.local); replace when deploying.
+// - The seeded gallery and the sample ad are Pollinations renders of fixed prompts + seeds:
+//   they demonstrate the design and are meant to be replaced via /admin.
+// - Seeded models are Pollinations' keyless Flux and Turbo endpoints.
+
+const POLL = 'https://image.pollinations.ai/prompt';
+
+export function pollUrl(prompt: string, seed: number, w: number, h: number, model = 'flux') {
+  return `${POLL}/${encodeURIComponent(prompt)}?width=${w}&height=${h}&seed=${seed}&model=${model}&nologo=true`;
+}
+
+export const site = {
+  name: 'DeepArt',
+  action: 'Generate',
+  url: 'https://deepart.local', // placeholder: production URL used for canonical, OG and sitemap
+  description:
+    'DeepArt is a browser-native image sampler: type a few words, pick a model, watch the render resolve. No login, no account, everything stays on your machine.',
+  year: new Date().getFullYear(),
+};
+
+export const HERO_PROMPT = 'lime green light through fog over a dark harbor, long exposure, fine grain';
+
+export type HeroContent = { eyebrow: string; headline: string; sub: string; seed: number };
+
+export type Model = {
+  id: string;
+  name: string;
+  slug: string;
+  endpoint: string; // supports {prompt} {width} {height} {seed} {model}
+  enabled: boolean;
+  builtIn?: boolean;
+};
+
+export type GalleryItem = { id: string; title: string; tag: string; url: string; addedAt: number };
+
+export type Ad = {
+  id: string;
+  headline: string;
+  link: string;
+  imageUrl: string;
+  placement: 'home-strip' | 'generate-sidebar';
+  active: boolean;
+};
+
+export type HistoryItem = {
+  id: string;
+  prompt: string;
+  modelId: string;
+  modelName: string;
+  width: number;
+  height: number;
+  seed: number;
+  url: string;
+  at: number;
+};
+
+export type Store = {
+  version: 1;
+  hero: HeroContent;
+  models: Model[];
+  gallery: GalleryItem[];
+  ads: Ad[];
+  history: HistoryItem[];
+  usage: { generations: number };
+};
+
+const defaultModels: Model[] = [
+  {
+    id: 'm-flux',
+    name: 'Flux',
+    slug: 'flux',
+    endpoint: `${POLL}/{prompt}?width={width}&height={height}&seed={seed}&model=flux&nologo=true`,
+    enabled: true,
+    builtIn: true,
+  },
+  {
+    id: 'm-turbo',
+    name: 'Turbo',
+    slug: 'turbo',
+    endpoint: `${POLL}/{prompt}?width={width}&height={height}&seed={seed}&model=turbo&nologo=true`,
+    enabled: true,
+    builtIn: true,
+  },
+];
+
+const seededGallery: Omit<GalleryItem, 'addedAt'>[] = [
+  { id: 'g-harbor', title: 'Harbor at dawn', tag: 'Landscape', url: pollUrl('harbor at dawn, long exposure, pale light, fine grain', 13831, 768, 960) },
+  { id: 'g-library', title: 'The long library', tag: 'Architecture', url: pollUrl('brutalist library interior, morning light, one reader', 57122, 768, 768) },
+  { id: 'g-west', title: 'West light', tag: 'Interiors', url: pollUrl('single chair in an empty flat, hard west light', 90418, 640, 800) },
+  { id: 'g-dune', title: 'Dune at noon', tag: 'Landscape', url: pollUrl('dune ridge at noon, minimal, one walker far away', 21649, 768, 576) },
+  { id: 'g-porcelain', title: 'Porcelain and linen', tag: 'Still life', url: pollUrl('porcelain vase on raw linen, soft window light', 77340, 768, 1024) },
+  { id: 'g-tower', title: 'Overcast tower', tag: 'Architecture', url: pollUrl('glass tower reflection, overcast sky, minimal', 50996, 640, 960) },
+  { id: 'g-umbrella', title: 'Red umbrella', tag: 'Street', url: pollUrl('red umbrella in rain, shallow depth, motion blur', 32871, 768, 768) },
+  { id: 'g-sand', title: 'Black sand', tag: 'Landscape', url: pollUrl('waves on black sand seen from above, aerial, foam lines', 68520, 800, 600) },
+];
+
+const seed: Store = {
+  version: 1,
+  hero: {
+    eyebrow: 'Text to image, straight from the browser',
+    headline: 'Pictures out of noise.',
+    sub: 'Type a few words. DeepArt samples a diffusion model and hands back a finished image. No login, no account: everything runs and stays in your browser.',
+    seed: 880231,
+  },
+  models: defaultModels,
+  gallery: seededGallery.map((g, i) => ({ ...g, addedAt: Date.now() - i * 86_400_000 })),
+  ads: [
+    {
+      id: 'ad-sample',
+      headline: 'This spot is yours. Add an ad in /admin and it lives here.',
+      link: '#',
+      imageUrl: pollUrl('wide minimal abstract poster, lime and ink flat shapes, print grain', 4277, 1200, 260),
+      placement: 'home-strip',
+      active: false,
+    },
+  ],
+  history: [],
+  usage: { generations: 0 },
+};
+
+export const seedStore = seed;
+export const SIZES = [
+  { label: 'Portrait 4:5', w: 896, h: 1120 },
+  { label: 'Square 1:1', w: 1024, h: 1024 },
+  { label: 'Wide 16:9', w: 1216, h: 684 },
+] as const;
+
+export const BUILT_IN_SLUGS = ['flux', 'turbo', 'kontext'];
+
+/** Structured copy of store state (structuredClone, JSON fallback). */
+export function cloneStore(s: Store): Store {
+  if (typeof structuredClone === 'function') return structuredClone(s);
+  return JSON.parse(JSON.stringify(s)) as Store;
+}
