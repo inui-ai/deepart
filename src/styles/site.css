@@ -188,20 +188,27 @@ html.motion .hero__plate[data-resolved='true'] .plate__noise {
 }
 @media (prefers-reduced-motion: reduce) { .plate__noise { animation: none !important; } }
 
-/* ---------------------------------------------------------------- hero (split frame) */
+/* ---------------------------------------------------------------- hero (statement poster)
+   One wide poster: type owns the width, the render lands full-bleed under the fold.
+   No side columns on big screens — the dead-space split is gone. */
 
 .hero {
-  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--u) var(--gutter);
-  padding: calc(var(--u) * 17) var(--gutter) calc(var(--u) * 10);
-  min-height: 92svh;
-  align-content: center;
+  display: grid; gap: calc(var(--u) * 3);
+  padding: calc(var(--u) * 13) 0 calc(var(--u) * 9);
 }
-.hero__copy { grid-column: 1 / 7; align-self: center; }
+.hero__head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: var(--gutter); padding: 0 var(--gutter);
+}
 .hero__eyebrow { font-size: var(--t-s); font-weight: 500; color: var(--c-muted); }
+.hero__meta {
+  font-family: var(--f-mono); font-size: var(--t-xs); letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--c-muted); white-space: nowrap;
+}
 .hero__title {
-  font-size: clamp(3rem, 0.6rem + 7.2vw, 7.4rem); font-weight: 600; line-height: 0.9;
-  letter-spacing: -0.04em; margin: 0.3em 0 0.4em; margin-left: -0.055em;
+  font-size: clamp(3.2rem, 0.2rem + 9.4vw, 9.6rem); font-weight: 600;
+  line-height: 0.92; letter-spacing: -0.045em; margin-left: -0.055em;
+  max-width: 12ch; padding: 0 var(--gutter); margin-bottom: calc(var(--u) * 1);
 }
 /* the headline itself comes in from noise with the page (pure CSS; motion users get it) */
 @keyframes titleResolve {
@@ -210,37 +217,46 @@ html.motion .hero__plate[data-resolved='true'] .plate__noise {
   100% { filter: blur(0); opacity: 1; }
 }
 html.motion .hero__title { animation: titleResolve 1s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both; }
-.hero__sub { max-width: 34rem; color: var(--c-muted); font-size: var(--t-m); line-height: 1.45; }
+.hero__row {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: calc(var(--u) * 3) var(--gutter); align-items: end;
+  padding: 0 var(--gutter);
+}
+.hero__sub {
+  grid-column: 1 / 6; max-width: 34rem; color: var(--c-muted);
+  font-size: var(--t-m); line-height: 1.45;
+}
+.hero__cta {
+  grid-column: 9 / 13; display: grid; gap: calc(var(--u) * 1.5);
+  justify-items: end; text-align: right;
+}
 .hero__steps {
   font-family: var(--f-mono); font-size: var(--t-s); letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--c-muted);
-  border-left: 1px solid var(--c-line); padding-left: calc(var(--u) * 1.6);
-  align-self: center;
+  border-right: 1px solid var(--c-line); padding-right: calc(var(--u) * 1.6);
 }
-.hero__cta { display: flex; gap: calc(var(--u) * 2.5); align-items: center; margin-top: calc(var(--u) * 4); }
-.hero__plate { grid-column: 7 / 13; align-self: center; }
-.hero__plate .plate__media { aspect-ratio: 1000 / 1200; }
+.hero__plate { margin: calc(var(--u) * 4) 0 0; }
+.hero__plate .plate__media { width: 100%; aspect-ratio: var(--ar, 21 / 9); }
+.hero__plate .plate__media img { width: 100%; height: 100%; object-fit: cover; }
 
 .home__strip { padding: 0 var(--gutter); }
 
-@media (max-width: 900px) {
-  .hero { min-height: 82svh; padding-top: calc(var(--u) * 12); }
-  .hero__copy { grid-column: 1 / 13; }
-  .hero__plate { grid-column: 2 / 13; margin-top: calc(var(--u) * 5); }
+@media (max-width: 1023px) {
+  .hero__sub { grid-column: 1 / 8; }
+  .hero__cta { grid-column: 1 / 13; grid-row: 2; justify-items: start; text-align: left; }
+  .hero__steps { border-right: none; border-left: 1px solid var(--c-line); padding-left: calc(var(--u) * 1.6); padding-right: 0; }
 }
 @media (max-width: 639px) {
-  .hero { grid-template-columns: 1fr; padding-top: calc(var(--u) * 10); }
-  /* phones: the render leads, the type follows — the plate is the first thing that paints */
-  .hero__plate { grid-column: 1 / 2; grid-row: 1; margin-top: 0; }
-  .hero__copy { grid-column: 1 / 2; grid-row: 2; margin-top: calc(var(--u) * 5); }
-  .hero__cta { flex-wrap: wrap; gap: calc(var(--u) * 2); }
-}
-/* short viewports (landscape phones and og-card crops): the sub yields, the plate squares */
-@media (max-height: 719px) {
-  .hero { min-height: 100svh; padding-top: calc(var(--u) * 12); }
-  .hero__sub { display: none; }
-  .hero__plate { margin-top: 0; }
+  .hero { padding-top: calc(var(--u) * 10); gap: calc(var(--u) * 2.5); }
+  .hero__head { flex-direction: column; gap: calc(var(--u) * 0.8); }
+  .hero__row { grid-template-columns: 1fr; }
+  .hero__sub { grid-column: 1 / -1; }
   .hero__plate .plate__media { aspect-ratio: 4 / 3; }
+}
+/* short viewports (landscape phones and og-card crops): the sub yields, plate stays */
+@media (max-height: 719px) {
+  .hero__sub { display: none; }
+  .hero__plate .plate__media { aspect-ratio: 5 / 2; }
 }
 
 /* ---------------------------------------------------------------- the sampler story (landing v3)

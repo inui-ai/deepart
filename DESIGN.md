@@ -106,7 +106,13 @@ HOME (the sampler story — section grammar mirrors the reference deck: color jo
 glass promo, mixed trio, dark run panel, ladder with media, numbered rows, truth
 marquee, circular exit — all in DeepArt's own voice):
 
-  hero (split frame): giant resolve title + copy/CTA + steps line beside CTA
+  hero (statement poster):
+  eyebrow left — "FLUX · 14 STEPS · LOCAL ONLY" mono right
+  PICTURES / OUT OF NOISE. — full-width statement, max 12ch, ~9.4vw
+  sub (span 5) · Generate + steps line right-aligned (span 4)
+  full-bleed 21:9 plate under the fold, spec stamped under (flux · 1600×680 · seed)
+
+  Phones: head stacks, sub full width, CTA left, plate crops 4:3.
   home__strip: the ad slot
   brand band: full-bleed LIME breath — 4-square noise glyph + "one line → fourteen
   steps → a picture"
