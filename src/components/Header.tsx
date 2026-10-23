@@ -45,11 +45,11 @@ export function Header() {
   return (
     <header className="frame" data-frame data-open={open || undefined}>
       <div className="frame__page">
-        <Link href={pathname} className="crumb" aria-current="page">
+        <span className="crumb" aria-current="page">
           <span aria-hidden="true">‹</span>
           {CRUMB[pathname] || 'Home'}
           <span aria-hidden="true">›</span>
-        </Link>
+        </span>
       </div>
 
       <div className="frame__bar">

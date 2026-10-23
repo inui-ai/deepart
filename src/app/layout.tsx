@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { FooterGate } from '@/components/FooterGate';
 import { Motion } from '@/components/Motion';
 import { StoreSync } from '@/components/StoreSync';
 import { Toaster } from '@/components/Toaster';
@@ -65,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <Header />
         <main id="main" tabIndex={-1}>{children}</main>
-        <Footer />
+        <FooterGate><Footer /></FooterGate>
         <StoreSync />
         <Toaster />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />

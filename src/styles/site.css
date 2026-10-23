@@ -30,19 +30,19 @@ body { font-size: var(--t-body); }
 }
 .frame__cta { justify-self: end; }
 
-/* the crumb: current page, mono, faint chevrons */
+/* the crumb: current page, mono, faint chevrons (a label, not a self-link: no prefetch) */
 .crumb {
   display: inline-flex; align-items: center; gap: 0.55em;
   background: color-mix(in srgb, var(--c-fg) 7%, var(--c-bg));
   border: 1px solid rgba(13, 13, 11, 0.08); border-radius: 4px;
-  padding: 0.45em 0.75em; text-decoration: none;
+  padding: 0.45em 0.75em;
   font-family: var(--f-mono); font-size: var(--t-xs);
   letter-spacing: 0.09em; text-transform: uppercase; color: var(--c-fg);
   white-space: nowrap;
 }
 .crumb span { color: var(--c-muted); }
 
-.brand { font-size: 0.92rem; font-weight: 500; letter-spacing: -0.01em; color: #fff; text-decoration: none; }
+.brand { font-size: 0.92rem; font-weight: 500; letter-spacing: -0.01em; color: #fff; text-decoration: none; padding: 0.55em 0; }
 .brand__mark { font-style: normal; color: var(--c-accent); margin-left: 0.3em; letter-spacing: 0.04em; }
 
 /* the burger: two hairlines, flips to a close mark while the menu is up */
