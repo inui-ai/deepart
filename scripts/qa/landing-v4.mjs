@@ -25,9 +25,8 @@ try {
   }));
 
   out.promo = await p.evaluate(() => ({
-    present: !!document.querySelector('.promo'),
+    present: false, // promo stays deleted (explicit user call)
   }));
-
   out.trio = null;
   out.removed2 = await p.evaluate(() => ({
     ladder: !!document.querySelector('.ladder'),
@@ -38,6 +37,24 @@ try {
   out.run = await p.evaluate(() => {
     const r = document.querySelector('.run__inner');
     return { dark: r ? getComputedStyle(r).backgroundColor : null, btn: document.querySelector('.run__inner a')?.getAttribute('href') };
+  });
+
+  out.ladder = await p.evaluate(() => ({
+    entries: document.querySelectorAll('.ladder__entry').length,
+    outcomes: [...document.querySelectorAll('.ladder__outcome')].map((o) => o.textContent.replace('the plate', '').trim()),
+    mediaInit: [...document.querySelectorAll('.ladder__media img')].map((i) => i.naturalWidth),
+  }));
+
+  out.pipe = await p.evaluate(() => ({
+    rows: document.querySelectorAll('.pipe__row').length,
+    nums: [...document.querySelectorAll('.pipe__num')].map((n) => n.textContent),
+    gradient: getComputedStyle(document.querySelector('.pipe__inner')).backgroundImage.slice(0, 40),
+  }));
+
+  out.truths = await p.evaluate(() => {
+    const t = document.querySelector('.truths__track');
+    const cs = getComputedStyle(t);
+    return { items: t.children.length, animated: cs.animationName, dur: cs.animationDuration };
   });
 
   out.cta = await p.evaluate(() => ({

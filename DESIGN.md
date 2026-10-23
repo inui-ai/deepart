@@ -102,8 +102,9 @@ markers. One committed theme (light). One accent, used rarely and semantically.
 ### Composition plan (different family every section)
 
 ```
-HOME (the sampler story — section grammar mirrors the reference deck: glass promo,
-dark run panel, circular exit — all in DeepArt's own voice):
+HOME (the sampler story — section grammar mirrors the reference deck: dark run panel,
+capability ladder, numbered rows, truths marquee, circular exit — all in DeepArt's own
+voice):
 
   hero (statement poster):
   eyebrow left — "UNLIMITED FREE IMAGE GENERATION" mono right (the value claim)
@@ -112,14 +113,21 @@ dark run panel, circular exit — all in DeepArt's own voice):
   full-bleed 21:9 plate under the fold, spec stamped under (flux · 1600×680 · seed)
 
   Phones: head stacks, sub full width, CTA left, plate crops 4:3.
-  home__strip: the ad slot
+  home__strip: the ad slot (seeded sample ad, toggle in /admin)
   run panel: dark full-bleed, "From prompt to plate in one line." + repeated-works
   copy + lime exit
+  ladder: 3 capability entries (fixed wide stage / seeds that repeat / local by
+  default), right-aligned text + outcome pill, full-width cropped media between
+  pipeline rows: tinted gradient panel, 01 Noise field / 02 The sampler /
+  03 The plate, numbers right
+  truths marquee: the free tier stated plainly, drifting (turbo off, ~45s, watermark,
+  local-only, seeds pinnable, no account) — two equal-length mono halves, no repeats
   wall (screening strip): v3 film leader unchanged
   cta band: dark blurred plate, "Your next picture is one line away." + circular
   lime generate disc
 
-  Phones: the plate leads in the hero; run panels go single-col.
+  Phones: the plate leads in the hero; run/ladder/pipe stack single-col; marquee
+  clips (never scrolls the page).
 
   corner frame: TL DeepArt - TR Nav (Generate/Wall/Admin) — the top bar anchors to the
   page (scrolls away, never prints over content); Menu pill stays fixed bottom-right
