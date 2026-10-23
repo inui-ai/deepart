@@ -193,7 +193,7 @@ html.motion .hero__plate[data-resolved='true'] .plate__noise {
 
 .hero {
   display: grid; gap: calc(var(--u) * 3);
-  padding: calc(var(--u) * 13) 0 calc(var(--u) * 9);
+  padding: calc(var(--u) * 7) 0 calc(var(--u) * 9);
 }
 .hero__head {
   display: flex; justify-content: space-between; align-items: baseline;
@@ -233,7 +233,10 @@ html.motion .hero__title { animation: titleResolve 1s cubic-bezier(0.16, 1, 0.3,
 .hero__steps {
   font-family: var(--f-mono); font-size: var(--t-s); letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--c-muted);
-  border-right: 1px solid var(--c-line); padding-right: calc(var(--u) * 1.6);
+}
+/* one line only where it fits (≥640px); phones wrap instead of overflowing */
+@media (min-width: 640px) {
+  .hero__steps { white-space: nowrap; }
 }
 .hero__plate { margin: calc(var(--u) * 4) 0 0; }
 .hero__plate .plate__media { width: 100%; aspect-ratio: var(--ar, 21 / 9); }
@@ -244,7 +247,6 @@ html.motion .hero__title { animation: titleResolve 1s cubic-bezier(0.16, 1, 0.3,
 @media (max-width: 1023px) {
   .hero__sub { grid-column: 1 / 8; }
   .hero__cta { grid-column: 1 / 13; grid-row: 2; justify-items: start; text-align: left; }
-  .hero__steps { border-right: none; border-left: 1px solid var(--c-line); padding-left: calc(var(--u) * 1.6); padding-right: 0; }
 }
 @media (max-width: 639px) {
   .hero { padding-top: calc(var(--u) * 10); gap: calc(var(--u) * 2.5); }
