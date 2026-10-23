@@ -10,8 +10,8 @@ import { useStore } from '@/lib/store';
 const W = 1600;
 const H = 680; // 21:9 poster frame; the file covers through object-fit, no distortion
 // matched to the actual file public/hero-flock.jpg (the re-encoded reference, see assets/)
-const IW = 2400;
-const IH = 1340;
+const IW = 1920;
+const IH = 1070;
 
 export function Hero({ hero }: { hero: HeroContent }) {
   return (
