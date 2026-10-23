@@ -10,10 +10,38 @@ import { resolveStage } from '@/motion/resolve';
 import { buildUrl, mutate, useStore } from '@/lib/store';
 import { toast } from '@/lib/toast';
 import { SIZES } from '@/data/site';
+import type { Model } from '@/data/site';
 
 type Status = 'idle' | 'loading' | 'done' | 'error';
 type Run = { prompt: string; modelId: string; modelName: string; w: number; h: number; seed: number; url: string };
 const STEP_MAX = 14;
+
+// OpenAI-compatible size: the API validates against a fixed set, so the pick maps on aspect.
+function openAiSize(w: number, h: number): string {
+  if (w > h) return '1536x1024';
+  if (h > w) return '1024x1536';
+  return '1024x1024';
+}
+
+// b64_json answers arrive as megabyte PNG strings; the 5 MB localStorage quota makes raw
+// storage a time bomb, so the plate keeps a canvas-downscaled JPEG data URL instead.
+async function b64ToJpegDataUrl(b64: string, maxSide = 1024): Promise<string> {
+  const src = `data:image/png;base64,${b64}`;
+  const img = new Image();
+  await new Promise((res, rej) => {
+    img.onload = () => res(null);
+    img.onerror = () => rej(new Error('the returned image could not be decoded'));
+    img.src = src;
+  });
+  const scale = Math.min(1, maxSide / Math.max(img.naturalWidth || 1, img.naturalHeight || 1));
+  const c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round((img.naturalWidth || 1) * scale));
+  c.height = Math.max(1, Math.round((img.naturalHeight || 1) * scale));
+  const ctx = c.getContext('2d');
+  if (!ctx) return src; // no canvas: keep the raw data URL; img-src data: is allowed by the CSP
+  ctx.drawImage(img, 0, 0, c.width, c.height);
+  return c.toDataURL('image/jpeg', 0.82);
+}
 
 export function Generate() {
   const s = useStore();
@@ -84,6 +112,10 @@ export function Generate() {
     const usePrompt = (fill?.prompt ?? prompt).trim();
     const m = s.models.find((x) => x.id === (fill?.modelId ?? modelId)) ?? model;
     if (!m || !usePrompt) return;
+    if (m.kind === 'openai') {
+      void runOpenAi(m, usePrompt, fill); // POST/JSON flow; the img load finishes the run
+      return;
+    }
     sample({
       prompt: usePrompt,
       modelId: m.id,
@@ -98,6 +130,49 @@ export function Generate() {
         seed: fill?.seed ?? seed,
       }),
     });
+  }
+
+  // OpenAI-compatible images API: POST JSON with a Bearer key, then feed the returned
+  // picture (hosted URL or b64_json) to the same stage path. Failure paths here must stop
+  // the ticker themselves — an <img> never fires onerror for a POST that never started.
+  async function runOpenAi(m: Model, usePrompt: string, fill?: Run) {
+    const w = fill?.w ?? size.w;
+    const h = fill?.h ?? size.h;
+    const r: Run = { prompt: usePrompt, modelId: m.id, modelName: m.name, w, h, seed: fill?.seed ?? seed, url: '' };
+    setStatus('loading');
+    setActive(r);
+    startTicker();
+    if (imgRef.current && stageRef.current && !prefersReducedMotion()) {
+      gsap.set(stageRef.current.querySelector('.plate__noise'), { autoAlpha: 1 });
+      gsap.set(imgRef.current, { filter: isMobile() ? 'none' : 'blur(5px)', scale: 1.02 });
+    }
+    try {
+      const res = await fetch(m.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${m.apiKey ?? ''}` },
+        body: JSON.stringify({
+          model: m.slug,
+          prompt: usePrompt,
+          size: openAiSize(w, h),
+          // dall-e models return hosted URLs on a foreign domain; ask for b64 where legal.
+          // gpt-image-1 rejects response_format and always answers b64 on its own.
+          ...(m.slug.startsWith('dall-e') ? { response_format: 'b64_json' } : {}),
+        }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const j = (await res.json()) as { data?: Array<{ url?: string; b64_json?: string }> };
+      const item = j.data?.[0];
+      let url = item?.url ?? '';
+      if (item?.b64_json) url = await b64ToJpegDataUrl(item.b64_json);
+      if (!url) throw new Error('the answer carried no image');
+      r.url = url;
+      setActive({ ...r });
+      imgRef.current?.setAttribute('src', url);
+    } catch (err) {
+      stopTicker();
+      setStatus('error');
+      toast(`The sampler did not converge: ${String((err as Error)?.message ?? err)}`, 'error');
+    }
   }
 
   function onImgLoad() {
@@ -149,7 +224,28 @@ export function Generate() {
   async function download() {
     if (!active) return;
     try {
-      const blob = await (await fetch(active.url)).blob();
+      // data: URLs (the openai b64 path) go through a canvas instead of fetch: deterministic,
+      // entitlement-free under the CSP, and keeps the file entirely local.
+      let blob: Blob;
+      if (active.url.startsWith('data:')) {
+        const img = new Image();
+        await new Promise((res, rej) => {
+          img.onload = () => res(null);
+          img.onerror = () => rej(new Error('decode failed'));
+          img.src = active.url;
+        });
+        const c = document.createElement('canvas');
+        c.width = img.naturalWidth;
+        c.height = img.naturalHeight;
+        const ctx = c.getContext('2d');
+        if (!ctx) throw new Error('no canvas');
+        ctx.drawImage(img, 0, 0);
+        blob = await new Promise<Blob>((res, rej) => {
+          c.toBlob((b) => (b ? res(b) : rej(new Error('no blob'))), 'image/jpeg', 0.9);
+        });
+      } else {
+        blob = await (await fetch(active.url)).blob();
+      }
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = `deepart-${active.modelName.toLowerCase()}-${active.seed}.jpg`;

@@ -15,7 +15,9 @@ const cspFor = (dev: boolean) =>
     "img-src 'self' data: https://image.pollinations.ai",
     `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""}`,
     "style-src 'self' 'unsafe-inline'",
-    "connect-src 'self' https://image.pollinations.ai",
+    // api.openai.com serves the OpenAI-compatible images POST (model kind: openai).
+    // Another compat provider means one more host on this list — a deliberate allowlist.
+    "connect-src 'self' https://image.pollinations.ai https://api.openai.com",
     "font-src 'self'",
     "frame-ancestors 'none'",
     "base-uri 'self'",

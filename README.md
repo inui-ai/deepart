@@ -42,7 +42,7 @@ Helpers of the same family: `scripts/lcp-probe.mjs` (LCP candidate trail), `scri
 | Content/config | `src/data/site.ts` | Copy, seeds, default models, the Pollinations placeholder host |
 | Store | `src/lib/store.ts` | localStorage `deepart:v1`, schema-validated, `parsePersisted` for upgrades |
 | Motion | `src/engine/` + `src/motion/` | Loader, transitions, the resolve driver (the concept's one motion system) |
-| Generate page | `src/components/Generate.tsx` | Endpoint templates with `{prompt} {width} {height} {seed} {model}` |
+| Generate page | `src/components/Generate.tsx` | Endpoint templates with `{prompt} {width} {height} {seed} {model}`, plus the OpenAI-compatible JSON POST branch |
 | QA shots | `.shots/` (gitignored) | `shoot.mjs` / `audit.mjs` output — see `docs/superpowers` for the loop |
 
 ## Placeholders & assumptions
@@ -54,4 +54,11 @@ Helpers of the same family: `scripts/lcp-probe.mjs` (LCP candidate trail), `scri
 - The seeded `Turbo` model ships **disabled**: the anonymous tier is Flux-only now. With a
   paid key, paste it into the model's **API key** field in the admin's Models tab; the
   built-in Turbo template carries `token={key}`. Keys live in localStorage only.
+- Models have two kinds (admin → Models → Kind). **URL template (GET)** renders the built
+  URL straight into the stage image. **OpenAI images (JSON POST)** calls any
+  OpenAI-compatible `/v1/images/generations` endpoint with `Authorization: Bearer <key>`
+  and body `{ model, prompt, size }`; hosted-URL answers work, while `b64_json` answers are
+  canvas-downscaled to a locally stored JPEG. A `gpt-image-1` built-in ships off; paste an
+  OpenAI key to switch it on. Other compat providers need their host allowlisted in
+  `next.config.ts` (the CSP `connect-src`).
 - Ads are inert by default (an admin pastes a URL or an inline snippet in the Ads tab).

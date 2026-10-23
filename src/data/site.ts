@@ -36,8 +36,9 @@ export type Model = {
   id: string;
   name: string;
   slug: string;
-  endpoint: string; // supports {prompt} {width} {height} {seed} {model} {key}
+  endpoint: string; // url kind: template with {prompt} {width} {height} {seed} {model} {key}; openai kind: the JSON POST URL
   apiKey?: string; // provider secret, stored locally by the owner's request; template uses {key}
+  kind?: 'url' | 'openai'; // url = GET <img> template (default); openai = OpenAI-compatible images API (POST JSON + Bearer)
   enabled: boolean;
   builtIn?: boolean;
 };
@@ -99,6 +100,15 @@ const defaultModels: Model[] = [
     slug: 'turbo',
     endpoint: `${POLL}/{prompt}?width={width}&height={height}&seed={seed}&model=turbo&token={key}`,
     enabled: false, // the Pollinations anonymous tier is Flux-only; with a paid key in the API key field this turns on
+    builtIn: true,
+  },
+  {
+    id: 'm-gptimg',
+    name: 'gpt-image-1',
+    slug: 'gpt-image-1',
+    kind: 'openai', // OpenAI-compatible images API: POST JSON + Authorization: Bearer
+    endpoint: 'https://api.openai.com/v1/images/generations',
+    enabled: false, // ships off; paste an OpenAI (or compatible) API key and turn it on
     builtIn: true,
   },
 ];
