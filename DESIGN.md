@@ -107,8 +107,11 @@ the plate, the deck: all DeepArt's own voice, paper + ink + lime):
 
   top bar, three pieces on one row (scrolls away, not sticky):
   ‹ HOME › crumb left (mono chip, current page) · deepart ꞉꞉ black bar center with
-  burger (opens the ink overlay: Generate / Gallery / Admin) · Generate ink pill with
-  lime arrow chip right
+  burger (opens the ink overlay: Generate / Gallery — Admin is unlisted, reachable
+  by direct URL only) · Generate ink pill with lime arrow chip right
+  menu links hug their text (focus ring marks the word, not a viewport stripe);
+  Gallery is /​#gallery: same-page clicks smooth-scroll via Lenis anchors, and a
+  cross-page entry lands on the section via jumpToHash() under the enter curtain
 
   hero (atelier poster):
   centered two-voice headline — store headline lands washed (--c-wash), the ink echo
@@ -134,7 +137,7 @@ the plate, the deck: all DeepArt's own voice, paper + ink + lime):
   run panel, ladder, pipeline rows, truths marquee, wall strip, CTA band. Old story
   components live in Landing.tsx / Wall.tsx untouched.
 
-wall (screening strip — a film leader, not a mosaic):
+wall (retired with the rework — historical plan; a film leader, not a mosaic):
 
   | eyebrow · title · index (seeded · local only · scroll sideways)   |
   |[frame 01][frame 02][frame 03][frame 04]→  … full plates, scroll-x |
