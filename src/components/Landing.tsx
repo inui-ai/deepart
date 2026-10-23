@@ -24,7 +24,7 @@ export function SamplerPromo() {
         <h2>Everything happens here.</h2>
         <p className="promo__body">
           Type a line, pick a model, watch the render step out of grain in real time.
-          The page talks straight to the sampler endpoint &mdash; no account, nothing uploaded.
+          The page talks straight to the sampler endpoint. No account, nothing uploaded.
         </p>
         <a className="btn btn--solid" href="/generate">Open the sampler</a>
       </div>
@@ -43,7 +43,7 @@ export function RunPanel() {
         </div>
         <div className="run__col">
           <h3>Repeated works, not one-offs.</h3>
-          <p>Prompt, model, size, seed &mdash; the readout types the spec as the sampler runs. Every plate can be made twice: same seed, same dawn.</p>
+          <p>Prompt, model, size, seed: the readout types the spec as the sampler runs. Every plate can be made twice: same seed, same dawn.</p>
           <a className="btn btn--solid" href="/generate">Open the sampler</a>
         </div>
       </div>
@@ -56,7 +56,7 @@ export function RunPanel() {
 const ROUNDS = [
   {
     title: 'A fixed wide stage',
-    body: 'Every render sits on a fixed 16:9 plate. Portrait work letterboxes inside it &mdash; contained, never cropped, never stretched.',
+    body: 'Every render sits on a fixed 16:9 plate. Portrait work letterboxes inside it: contained, never cropped, never stretched.',
     outcome: 'plate 864\u00d7486 \u00b7 contain, never crop',
     media: seeded[3], // dune at noon
     ar: '1200 / 675',
@@ -121,7 +121,7 @@ export function PipelineRows() {
       <div className="pipe__inner" data-reveal="up">
         <div className="pipe__intro">
           <h2>The same steps, every time.</h2>
-          <p>Nothing random about the process &mdash; only the field is. The machine is legible: three stations, one direction.</p>
+          <p>Nothing random about the process: only the field is. The machine is legible: three stations, one direction.</p>
         </div>
         <ol className="pipe__rows">
           {rows.map(([num, name, line]) => (
@@ -141,14 +141,24 @@ export function PipelineRows() {
 // A slow, honest marquee: the operating constraints stated as design material.
 export function TruthsMarquee() {
   const truths = [
-    'turbo is off \u2014 free tier',
+    'turbo is off (free tier)',
     'one fresh render \u2248 every 45s',
     'renders carry a watermark',
     'everything stays on this machine',
     'seeds are yours to pin',
     'no account, ever',
   ];
-  const strip = [...truths, ...truths];
+  // second half: a rewording of each truth, same character count per slot
+  // (mono type) so the -50% loop seam lands pixel-exact while no sentence repeats.
+  const truthsAgain = [
+    'the turbo stays off here',
+    'new render \u2248 every 45s or so',
+    'plates arrive watermarked',
+    'your pixels stay on this machine',
+    'a seed is yours to pin',
+    'no fee, no login',
+  ];
+  const strip = [...truths, ...truthsAgain];
   return (
     <section className="truths" aria-label="The sampler's truths">
       <p className="truths__head">the free tier, stated plainly</p>
