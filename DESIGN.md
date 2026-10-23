@@ -102,9 +102,8 @@ markers. One committed theme (light). One accent, used rarely and semantically.
 ### Composition plan (different family every section)
 
 ```
-HOME (the sampler story — section grammar mirrors the reference deck: color journey,
-glass promo, mixed trio, dark run panel, ladder with media, numbered rows, truth
-marquee, circular exit — all in DeepArt's own voice):
+HOME (the sampler story — section grammar mirrors the reference deck: glass promo,
+dark run panel, circular exit — all in DeepArt's own voice):
 
   hero (statement poster):
   eyebrow left — "UNLIMITED FREE IMAGE GENERATION" mono right (the value claim)
@@ -118,18 +117,12 @@ marquee, circular exit — all in DeepArt's own voice):
   ("Everything happens here." + Open the sampler)
   run panel: dark full-bleed, "From prompt to plate in one line." + repeated-works
   copy + lime exit
-  ladder: 3 capability entries (fixed wide stage / seeds that repeat / local by
-  default), right-aligned text + outcome pill, full-width cropped media between
-  pipeline rows: tinted gradient panel, 01 Noise field / 02 The sampler /
-  03 The plate, numbers right
-  truths marquee: the free tier stated plainly, drifting (turbo off, ~45s, watermark,
-  local-only, seeds pinnable, no account)
   wall (screening strip): v3 film leader unchanged
   cta band: dark blurred plate, "Your next picture is one line away." + circular
   lime generate disc
 
-  Phones: the plate leads in the hero; promo/trio/ladder/pipe stack single-col;
-  marquee clips (never scrolls the page).
+  Phones: the plate leads in the hero; promo stacks over the media; run panels
+  go single-col.
 
   corner frame: TL DeepArt - TR Nav (Generate/Wall/Admin) — the top bar anchors to the
   page (scrolls away, never prints over content); Menu pill stays fixed bottom-right
