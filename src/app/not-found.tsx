@@ -18,7 +18,7 @@ export default function NotFound() {
       <h1 className="lost__title">This page ran out of focus.</h1>
       <p className="lost__sub">
         The address resolved to nothing. The visible site stays on three pages: the{' '}
-        <Link className="link" href="/">wall</Link>, the <Link className="link" href="/generate">sampler</Link> and{' '}
+        <Link className="link" href="/">gallery</Link>, the <Link className="link" href="/generate">sampler</Link> and{' '}
         <Link className="link" href="/admin">admin</Link>.
       </p>
       <Link href="/" className="btn btn--solid" data-fill data-no-transition>

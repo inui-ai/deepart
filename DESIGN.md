@@ -102,36 +102,37 @@ markers. One committed theme (light). One accent, used rarely and semantically.
 ### Composition plan (different family every section)
 
 ```
-HOME (the sampler story — section grammar mirrors the reference deck: dark run panel,
-capability ladder, numbered rows, truths marquee, circular exit — all in DeepArt's own
-voice):
+HOME (reworked per the user's reference deck — the organizer bar + two-voice statement,
+the plate, the deck: all DeepArt's own voice, paper + ink + lime):
 
-  hero (statement poster):
-  eyebrow left — "UNLIMITED FREE IMAGE GENERATION" mono right (the value claim)
-  PICTURES / OUT OF NOISE. — full-width statement, max 12ch, ~8.6vw
-  sub (span 5) · Generate + "no account · no credits · type and render" right-aligned
-  full-bleed 21:9 plate under the fold, spec stamped under (flux · 1600×680 · seed)
+  top bar, three pieces on one row (scrolls away, not sticky):
+  ‹ HOME › crumb left (mono chip, current page) · deepart ꞉꞉ black bar center with
+  burger (opens the ink overlay: Generate / Gallery / Admin) · Generate ink pill with
+  lime arrow chip right
 
-  Phones: head stacks, sub full width, CTA left, plate crops 4:3.
-  home__strip: the ad slot (seeded sample ad, toggle in /admin)
-  run panel: dark full-bleed, "From prompt to plate in one line." + repeated-works
-  copy + lime exit
-  ladder: 3 capability entries (fixed wide stage / seeds that repeat / local by
-  default), right-aligned text + outcome pill, full-width cropped media between
-  pipeline rows: tinted gradient panel, 01 Noise field / 02 The sampler /
-  03 The plate, numbers right
-  truths marquee: the free tier stated plainly, drifting (turbo off, ~45s, watermark,
-  local-only, seeds pinnable, no account) — two equal-length mono halves, no repeats
-  wall (screening strip): v3 film leader unchanged
-  cta band: dark blurred plate, "Your next picture is one line away." + circular
-  lime generate disc
+  hero (atelier poster):
+  centered two-voice headline — store headline lands washed (--c-wash), the ink echo
+  "Type, render, keep and repeat." carries the verbs
+  wide 21:9 plate (the seeded macro eye render), rounded corners
+  glass card parked bottom-left on the plate: deepart + "The open image sampler.",
+  body copy (fourteen steps, stays local), Generate exit, mono promise line
+  "unlimited · free · no account · no credits"
+  mono spec under (flux · 1600×680 · seed)
 
-  Phones: the plate leads in the hero; run/ladder/pipe stack single-col; marquee
-  clips (never scrolls the page).
+  gallery (the deck, #gallery):
+  centered two-voice head: washed "Plates that already left the noise." / ink
+  "Every one began as a typed line." + mono kicker "the gallery · eight seeds pinned"
+  alternating 7/5 grid on the 12-col rail, rounded media, one mono spec line per
+  plate (01 Harbor at dawn … 08 Black sand), lazy-loaded, static figures
 
-  corner frame: TL DeepArt - TR Nav (Generate/Wall/Admin) — the top bar anchors to the
-  page (scrolls away, never prints over content); Menu pill stays fixed bottom-right
-  (small screens: top bar + menu overlay)
+  footer: DeepArt poster wordmark, links, colophon — unchanged
+
+  Phones: crumb hides, bar + Generate hold one row; headline stacks tight; plate
+  crops 4:5 with the card full-width inside; gallery goes single column.
+
+  Retired sections (still committed, restorable one revert away): home__strip,
+  run panel, ladder, pipeline rows, truths marquee, wall strip, CTA band. Old story
+  components live in Landing.tsx / Wall.tsx untouched.
 
 wall (screening strip — a film leader, not a mosaic):
 

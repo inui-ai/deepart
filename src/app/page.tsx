@@ -1,7 +1,5 @@
 import { HeroFromStore } from '@/components/Hero';
-import { AdSlot } from '@/components/AdSlot';
-import { Wall } from '@/components/Wall';
-import { CtaBand, Ladder, PipelineRows, RunPanel, TruthsMarquee } from '@/components/Landing';
+import { Gallery } from '@/components/Gallery';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -10,19 +8,13 @@ export const metadata: Metadata = {
     'Type a few words, pick a model and watch the render resolve in steps. DeepArt runs in your browser: no login, no account, nothing leaves your machine.',
 };
 
+// The landing, reworked: the atelier hero (statement + plate with a glass card), then
+// the gallery deck. Footer arrives with the layout.
 export default function Home() {
   return (
     <>
       <HeroFromStore />
-      <div className="home__strip">
-        <AdSlot placement="home-strip" />
-      </div>
-      <RunPanel />
-      <Ladder />
-      <PipelineRows />
-      <TruthsMarquee />
-      <Wall />
-      <CtaBand />
+      <Gallery />
     </>
   );
 }

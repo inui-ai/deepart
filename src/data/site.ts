@@ -21,7 +21,8 @@ export const site = {
   year: new Date().getFullYear(),
 };
 
-export const HERO_PROMPT = 'lime green light through fog over a dark harbor, long exposure, fine grain';
+// The hero plate: a warm cinematic macro, the reference's close-up mood in DeepArt's voice.
+export const HERO_PROMPT = 'cinematic macro close-up of a human eye, warm film light, skin tones, shallow depth of field, fine grain';
 
 export type HeroContent = { eyebrow: string; headline: string; sub: string; seed: number };
 
@@ -34,7 +35,16 @@ export type Model = {
   builtIn?: boolean;
 };
 
-export type GalleryItem = { id: string; title: string; tag: string; url: string; addedAt: number };
+export type GalleryItem = {
+  id: string;
+  title: string;
+  tag: string;
+  url: string;
+  addedAt: number;
+  w?: number;
+  h?: number;
+  seed?: number;
+};
 
 export type Ad = {
   id: string;
@@ -87,14 +97,14 @@ const defaultModels: Model[] = [
 ];
 
 const seededGallery: Omit<GalleryItem, 'addedAt'>[] = [
-  { id: 'g-harbor', title: 'Harbor at dawn', tag: 'Landscape', url: pollUrl('harbor at dawn, long exposure, pale light, fine grain', 13831, 768, 960) },
-  { id: 'g-library', title: 'The long library', tag: 'Architecture', url: pollUrl('brutalist library interior, morning light, one reader', 57122, 768, 768) },
-  { id: 'g-west', title: 'West light', tag: 'Interiors', url: pollUrl('single chair in an empty flat, hard west light', 90418, 640, 800) },
-  { id: 'g-dune', title: 'Dune at noon', tag: 'Landscape', url: pollUrl('dune ridge at noon, minimal, one walker far away', 21649, 768, 576) },
-  { id: 'g-porcelain', title: 'Porcelain and linen', tag: 'Still life', url: pollUrl('porcelain vase on raw linen, soft window light', 77340, 768, 1024) },
-  { id: 'g-tower', title: 'Overcast tower', tag: 'Architecture', url: pollUrl('glass tower reflection, overcast sky, minimal', 50996, 640, 960) },
-  { id: 'g-umbrella', title: 'Red umbrella', tag: 'Street', url: pollUrl('red umbrella in rain, shallow depth, motion blur', 32871, 768, 768) },
-  { id: 'g-sand', title: 'Black sand', tag: 'Landscape', url: pollUrl('waves on black sand seen from above, aerial, foam lines', 68520, 800, 600) },
+  { id: 'g-harbor', title: 'Harbor at dawn', tag: 'Landscape', url: pollUrl('harbor at dawn, long exposure, pale light, fine grain', 13831, 768, 960), w: 768, h: 960, seed: 13831 },
+  { id: 'g-library', title: 'The long library', tag: 'Architecture', url: pollUrl('brutalist library interior, morning light, one reader', 57122, 768, 768), w: 768, h: 768, seed: 57122 },
+  { id: 'g-west', title: 'West light', tag: 'Interiors', url: pollUrl('single chair in an empty flat, hard west light', 90418, 640, 800), w: 640, h: 800, seed: 90418 },
+  { id: 'g-dune', title: 'Dune at noon', tag: 'Landscape', url: pollUrl('dune ridge at noon, minimal, one walker far away', 21649, 768, 576), w: 768, h: 576, seed: 21649 },
+  { id: 'g-porcelain', title: 'Porcelain and linen', tag: 'Still life', url: pollUrl('porcelain vase on raw linen, soft window light', 77340, 768, 1024), w: 768, h: 1024, seed: 77340 },
+  { id: 'g-tower', title: 'Overcast tower', tag: 'Architecture', url: pollUrl('glass tower reflection, overcast sky, minimal', 50996, 640, 960), w: 640, h: 960, seed: 50996 },
+  { id: 'g-umbrella', title: 'Red umbrella', tag: 'Street', url: pollUrl('red umbrella in rain, shallow depth, motion blur', 32871, 768, 768), w: 768, h: 768, seed: 32871 },
+  { id: 'g-sand', title: 'Black sand', tag: 'Landscape', url: pollUrl('waves on black sand seen from above, aerial, foam lines', 68520, 800, 600), w: 800, h: 600, seed: 68520 },
 ];
 
 const seed: Store = {

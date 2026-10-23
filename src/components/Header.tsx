@@ -1,18 +1,22 @@
 'use client';
-// The corner frame: brand + primary nav along the top — it scrolls away with the page,
-// so nothing ever prints over content. The Menu pill stays a fixed corner utility.
-// On phones the top bar is brand only; navigation lives in the menu overlay.
+// The reference bar, three pieces on one row: page crumb (left), brand + burger in a
+// black bar (center), the primary action (right). The whole header anchors to the page
+// top and scrolls away (not sticky). Navigation lives in the ink overlay behind; the
+// burger flips to a close mark while it is up.
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { startScroll, stopScroll } from '@/engine';
+import { site } from '@/data/site';
 
 const NAV = [
   { label: 'Generate', href: '/generate' },
-  { label: 'Wall', href: '/#wall' },
+  { label: 'Gallery', href: '/#gallery' },
   { label: 'Admin', href: '/admin' },
 ] as const;
+
+const CRUMB: Record<string, string> = { '/': 'Home', '/generate': 'Generate', '/admin': 'Admin' };
 
 export function Header() {
   const pathname = usePathname() || '/';
@@ -39,36 +43,41 @@ export function Header() {
   }, [open]);
 
   return (
-    <header className="frame" data-frame>
-      <div className="frame__tl">
-        <Link href="/" className="brand" aria-label="DeepArt home">
-          <span>DeepArt<i className="brand__dot" aria-hidden="true" /></span>
+    <header className="frame" data-frame data-open={open || undefined}>
+      <div className="frame__page">
+        <Link href={pathname} className="crumb" aria-current="page">
+          <span aria-hidden="true">‹</span>
+          {CRUMB[pathname] || 'Home'}
+          <span aria-hidden="true">›</span>
         </Link>
       </div>
-      <nav className="frame__tr nav" aria-label="Primary">
-        {NAV.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`nav__link roll ${pathname === item.href ? 'is-current' : ''}`}
-            aria-current={pathname === item.href ? 'page' : undefined}
-          >
-            <span>{item.label}</span>
-            <span aria-hidden="true">{item.label}</span>
-          </Link>
-        ))}
-      </nav>
-      <div className="frame__br">
+
+      <div className="frame__bar">
+        <Link href="/" className="brand" aria-label="DeepArt home">
+          <span>
+            deepart
+            <i className="brand__mark" aria-hidden="true">꞉꞉</i>
+          </span>
+        </Link>
         <button
           ref={btn}
           type="button"
-          className="frame__menu"
+          className="bar__burger"
           aria-expanded={open}
           aria-controls="menu"
+          aria-label={open ? 'Close menu' : 'Open menu'}
           onClick={() => { setOpen(!open); if (open) gsap.set(panel.current, { autoAlpha: 0 }); }}
         >
-          {open ? 'Close' : 'Menu'}
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
         </button>
+      </div>
+
+      <div className="frame__cta">
+        <Link href="/generate" className="barcta">
+          {site.action}
+          <i aria-hidden="true">❯</i>
+        </Link>
       </div>
 
       <nav
@@ -79,7 +88,13 @@ export function Header() {
         aria-label="Menu"
       >
         {NAV.map((item, i) => (
-          <Link key={item.href} href={item.href} style={{ transitionDelay: `${i * 60}ms` }} className="menu__link">
+          <Link
+            key={item.href}
+            href={item.href}
+            style={{ transitionDelay: `${i * 60}ms` }}
+            className="menu__link"
+            onClick={() => setOpen(false)}
+          >
             {item.label}
           </Link>
         ))}

@@ -1,43 +1,30 @@
 'use client';
-// Statement hero: the headline owns the whole width, the sampler's spec line sits as a
-// mono counter-run, and the render lands full-bleed under the fold like a plate in the
-// press. Joins the page intro and resolves from noise once the loader is done.
+// Atelier hero, per the reference: a centered two-voice statement (the store headline
+// lands washed, an ink echo carries the verbs), then the render lands as a wide plate
+// with a glass card parked on it. The card carries the promise the old corner type had.
 import type { CSSProperties } from 'react';
 import Link from 'next/link';
-import { pollUrl, site, type HeroContent } from '@/data/site';
+import { HERO_PROMPT, pollUrl, site, type HeroContent } from '@/data/site';
 import { retryableImgError } from '@/lib/img';
 import { useStore } from '@/lib/store';
 
 const W = 1600;
-const H = 680; // 21:9 poster ratio — the intended hero crop, near-zero crop on render
+const H = 680; // 21:9 poster ratio, the intended hero crop, near-zero crop on render
 
 export function Hero({ hero }: { hero: HeroContent }) {
-  const src = pollUrl('wide harbor at night under lime green fog, long exposure, dark water, fine grain', hero.seed, W, H);
+  const src = pollUrl(HERO_PROMPT, hero.seed, W, H);
 
   return (
     <section className="hero" aria-labelledby="hero-title">
-      <header className="hero__head">
-        <p className="hero__eyebrow" data-reveal="fade" data-intro data-delay="0.2">{hero.eyebrow}</p>
-        <p className="hero__meta" data-reveal="fade" data-intro data-delay="0.2">unlimited free image generation</p>
-      </header>
-      <h1 id="hero-title" className="hero__title">{hero.headline}</h1>
-      <div className="hero__row">
-        <p className="hero__sub" data-reveal="fade" data-intro data-delay="0.35">
-          {hero.sub}
-        </p>
-        <div className="hero__cta" data-reveal="fade" data-intro data-delay="0.5">
-          <Link href="/generate" className="btn btn--solid" data-fill>
-            <span className="btn__fill" aria-hidden="true" />
-            {site.action}
-          </Link>
-          <p className="hero__steps">no account &middot; no credits &middot; type and render</p>
-        </div>
-      </div>
+      <h1 id="hero-title" className="hero__title">
+        <span className="hero__line hero__line--a">{hero.headline}</span>
+        <span className="hero__line hero__line--b">Type, render, keep and repeat.</span>
+      </h1>
       <figure className="plate hero__plate" data-resolve data-intro style={{ '--ar': `${W} / ${H}` } as CSSProperties}>
         <div className="plate__media">
           <img
             src={src}
-            alt="A fogged harbor under lime light, one of the seeded renders"
+            alt="Cinematic macro render: one of the seeded DeepArt plates"
             width={W}
             height={H}
             fetchPriority="high"
@@ -46,6 +33,19 @@ export function Hero({ hero }: { hero: HeroContent }) {
           />
           <div className="plate__noise" aria-hidden="true" />
           <div className="plate__flash" aria-hidden="true" />
+          <div className="hero__card" data-reveal="fade" data-intro data-delay="0.4">
+            <p className="hero__cardTitle"><b>deepart</b> The open image sampler.</p>
+            <p className="hero__cardBody">
+              Type a line, pick a model and watch the picture resolve from grain in
+              fourteen visible steps. No account, nothing uploaded: everything stays
+              on this machine.
+            </p>
+            <Link href="/generate" className="barcta hero__cardCta">
+              {site.action}
+              <i aria-hidden="true">❯</i>
+            </Link>
+            <p className="hero__cardMeta">unlimited · free · no account · no credits</p>
+          </div>
         </div>
         <figcaption className="plate__spec">
           <span>flux</span>

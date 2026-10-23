@@ -9,7 +9,7 @@ export function Footer() {
         <nav aria-label="Footer" className="footer__links">
           {[
             { label: 'Generate', href: '/generate' },
-            { label: 'The wall', href: '/#wall' },
+            { label: 'The gallery', href: '/#gallery' },
             { label: 'Admin', href: '/admin' },
           ].map((item) => (
             <Link key={item.href} className="roll footer__link" href={item.href}>

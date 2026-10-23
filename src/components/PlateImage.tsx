@@ -20,6 +20,7 @@ export function PlateImage({ src, alt, width, height, hidden, eager, retries = 2
       alt={hidden ? '' : alt}
       aria-hidden={hidden || undefined}
       decoding={eager ? 'sync' : 'async'}
+      loading={eager ? 'eager' : 'lazy'}
       fetchPriority={eager ? 'high' : 'low'}
       width={width}
       height={height}

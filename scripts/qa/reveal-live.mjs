@@ -12,7 +12,7 @@ await p.waitForTimeout(3200);
 
 const scan = async (label) => {
   const out = await p.evaluate(() => {
-    const sel = '.hero__eyebrow,.hero__meta,.hero__title,.hero__sub,.hero__steps,.run__inner h2,.run__inner h3,.ladder__text h3,.ladder__outcome,.pipe__intro h2,.truths__head,.wall__kick,.wall__head h2,.cta__inner h2,.foot__brand,.home__strip';
+    const sel = '.hero__line--a,.hero__line--b,.hero__cardTitle,.hero__cardBody,.hero__cardMeta,.gal__kicker,.gal__line,.gal__cap b,.footer__colophon';
     const bad = [];
     for (const el of document.querySelectorAll(sel)) {
       const cs = getComputedStyle(el);

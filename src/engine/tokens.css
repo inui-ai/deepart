@@ -4,6 +4,7 @@
   --c-bg: #FBFBF9;
   --c-fg: #0D0D0B;
   --c-muted: #61645C;
+  --c-wash: #7B766E; /* the washed voice of a two-voice headline (>=3:1 at display size) */
   --c-line: rgba(13, 13, 11, 0.14);
   --c-accent: #C9F73A;
   --c-on-accent: #0D0D0B;

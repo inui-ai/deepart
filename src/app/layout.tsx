@@ -26,7 +26,8 @@ const flags = `document.documentElement.classList.add('js');if(!matchMedia('(pre
 
 // Warm-cache hint for the hero render: the seeded URL is a fixed key the sampler serves
 // from its cache, so discovery starts at connection time, not image-parse time.
-const heroPreload = pollUrl(HERO_PROMPT, seedStore.hero.seed, 1000, 1200);
+// Must match the exact URL the hero <img> requests below (1600x680 plate).
+const heroPreload = pollUrl(HERO_PROMPT, seedStore.hero.seed, 1600, 680);
 
 const jsonLd = {
   '@context': 'https://schema.org',
