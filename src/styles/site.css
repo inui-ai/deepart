@@ -206,7 +206,7 @@ html.motion .hero__plate[data-resolved='true'] .plate__noise {
   text-transform: uppercase; color: var(--c-muted); white-space: nowrap;
 }
 .hero__title {
-  font-size: clamp(3.2rem, 0.2rem + 9.4vw, 9.6rem); font-weight: 600;
+  font-size: clamp(3.2rem, 0.2rem + 8.6vw, 8.9rem); font-weight: 600;
   line-height: 0.92; letter-spacing: -0.045em; margin-left: -0.055em;
   max-width: 12ch; padding: 0 var(--gutter); margin-bottom: calc(var(--u) * 1);
 }
@@ -224,7 +224,8 @@ html.motion .hero__title { animation: titleResolve 1s cubic-bezier(0.16, 1, 0.3,
 }
 .hero__sub {
   grid-column: 1 / 6; max-width: 34rem; color: var(--c-muted);
-  font-size: var(--t-m); line-height: 1.45;
+  font-size: clamp(1.15rem, 1.05rem + 0.45vw, 1.38rem); line-height: 1.45;
+  margin-top: calc(var(--u) * 0.6);
 }
 .hero__cta {
   grid-column: 9 / 13; display: grid; gap: calc(var(--u) * 1.5);
