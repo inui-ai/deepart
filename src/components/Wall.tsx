@@ -42,18 +42,21 @@ export function Wall() {
     return () => { document.removeEventListener('keydown', onKey); startScroll(); };
   }, [open]);
 
-  // The wall queues its renders: two plates fetch at a time as they scroll into range,
-  // so a first-ever visit paces its requests instead of racing the sampler's limiter.
+  // The wall queues its renders: two plates fetch at a time as they come into range —
+  // vertical: the whole strip must be near the viewport; horizontal: a frame fetches when
+  // it nears the strip's own box (frames offscreen to the strip's right stay queued).
   useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
+    const strip = stripRef.current;
+    if (!strip || items.length === 0) return;
+    let visible = false;
     let pending = 0;
-    const waiting: (() => void)[] = [];
+    const waiting: Array<() => void> = [];
     const MAX = 2;
     const pump = () => {
-      if (pending >= MAX || waiting.length === 0) return;
-      pending += 1;
-      waiting.shift()!();
+      while (visible && pending < MAX && waiting.length > 0) {
+        pending += 1;
+        waiting.shift()!();
+      }
     };
     const load = (img: HTMLImageElement) => {
       waiting.push(() => {
@@ -64,21 +67,29 @@ export function Wall() {
       });
       pump();
     };
-    const io = new IntersectionObserver(
+    const frameIO = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
-          io.unobserve(entry.target);
+          frameIO.unobserve(entry.target);
           const img = entry.target as HTMLImageElement;
           if (!img.src) load(img);
         }
       },
+      { root: strip, rootMargin: '0px 720px' },
+    );
+    strip.querySelectorAll<HTMLImageElement>('img[data-src]').forEach((img) => {
+      if (!img.src) frameIO.observe(img);
+    });
+    const openIO = new IntersectionObserver(
+      (entries) => {
+        visible = entries.some((e) => e.isIntersecting);
+        if (visible) pump();
+      },
       { rootMargin: '480px 0px' },
     );
-    root.querySelectorAll<HTMLImageElement>('img[data-src]').forEach((img) => {
-      if (!img.src) io.observe(img);
-    });
-    return () => io.disconnect();
+    openIO.observe(strip);
+    return () => { frameIO.disconnect(); openIO.disconnect(); };
   }, [items]);
 
   // The film-leader readout: counter, progress line and arrow states follow the scroll.

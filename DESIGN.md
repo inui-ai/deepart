@@ -102,29 +102,36 @@ markers. One committed theme (light). One accent, used rarely and semantically.
 ### Composition plan (different family every section)
 
 ```
-HOME
-hero (split frame):
+HOME (the sampler story — section grammar mirrors the reference deck: color journey,
+glass promo, mixed trio, dark run panel, ladder with media, numbered rows, truth
+marquee, circular exit — all in DeepArt's own voice):
 
-  | 1 2 3 4 5 6 | 7 8 9 10 11 12 |
-  | EYEBROW            |  [hero plate image       ]
-  | PICTURES           |  [edge-to-edge right     ]
-  | OUT OF NOISE.      |  [render, resolves in    ]  ← title ~clamp(3rem, 7.2vw, 7.4rem),
-  | sub ...            |  [on load + the headline    resolves from blur on motion,
-  | [Generate] · words →    itself blurs in from   noise→sharp in one pass]
-  |  sampler 14 → plate|  [spec line: model·size  ]
+  hero (split frame): giant resolve title + copy/CTA + steps line beside CTA
+  home__strip: the ad slot
+  brand band: full-bleed LIME breath — 4-square noise glyph + "one line → fourteen
+  steps → a picture"
+  sampler promo: warm plate media, darkened, with a GLASS card parked on it
+  ("Everything happens here." + Open the sampler)
+  trio (plain / checklist / ink): no account · models in the open (Flux on, Turbo
+  off, Kontext BYOK) · "RUNS IN STEPS" 14 impact card
+  run panel: dark full-bleed, "From prompt to plate in one line." + repeated-works
+  copy + lime exit
+  ladder: 3 capability entries (fixed wide stage / seeds that repeat / local by
+  default), right-aligned text + outcome pill, full-width cropped media between
+  pipeline rows: tinted gradient panel, 01 Noise field / 02 The sampler /
+  03 The plate, numbers right
+  truths marquee: the free tier stated plainly, drifting (turbo off, ~45s, watermark,
+  local-only, seeds pinnable, no account)
+  wall (screening strip): v3 film leader unchanged
+  cta band: dark blurred plate, "Your next picture is one line away." + circular
+  lime generate disc
 
-  Phones: the columns stack with the plate FIRST (poster above type) so the first
-  paint and the LCP are the render itself, not the copy.
+  Phones: the plate leads in the hero; promo/trio/ladder/pipe stack single-col;
+  marquee clips (never scrolls the page).
 
   corner frame: TL DeepArt - TR Nav (Generate/Wall/Admin) — the top bar anchors to the
   page (scrolls away, never prints over content); Menu pill stays fixed bottom-right
   (small screens: top bar + menu overlay)
-
-the run (3-step band, hairline top):
-  | 01 WORDS IN      | 02 THE SAMPLER RUNS | 03 PLATE OUT      |
-  | type one line;   | flux denoises 14    | finished picture, |
-  | optional seed    | steps in-browser    | spec in margin    |
-  (span-4 each; span-6 ≤1023; full ≤639)
 
 wall (screening strip — a film leader, not a mosaic):
 
