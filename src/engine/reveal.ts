@@ -37,10 +37,12 @@ export function initReveals(root: ParentNode = document) {
   const intro = gsap.timeline({ paused: true });
   if (prefersReducedMotion()) return intro;
 
+  const blocks: HTMLElement[] = [];
   root.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
     const isIntro = el.hasAttribute('data-intro');
     const t = blockTween(el, isIntro);
     if (isIntro) intro.add(() => t.play(), 0);
+    else blocks.push(el);
   });
   root.querySelectorAll<HTMLElement>('[data-parallax]').forEach((el) => {
     const amount = parseFloat(el.dataset.parallax || '0.15');
@@ -50,5 +52,22 @@ export function initReveals(root: ParentNode = document) {
       scrollTrigger: { trigger: el.parentElement || el, start: 'top bottom', end: 'bottom top', scrub: true },
     });
   });
+
+  // self-heal: a reveal whose scroll trigger never fires must not stay invisible forever.
+  // Every beat, anything at or above the fold edge and still dark gets flipped visible.
+  const heal = setInterval(() => {
+    let pending = false;
+    for (const el of blocks) {
+      if ((gsap.getProperty(el, 'autoAlpha') as number) >= 0.999) continue;
+      pending = true;
+      if (el.getBoundingClientRect().top < innerHeight + 240) {
+        gsap.killTweensOf(el);
+        gsap.set(el, { visibility: 'visible' });
+        gsap.to(el, { autoAlpha: 1, y: 0, duration: 0.5, ease: ease.out, overwrite: 'auto' });
+      }
+    }
+    if (!pending) clearInterval(heal);
+  }, 1500);
+
   return intro;
 }

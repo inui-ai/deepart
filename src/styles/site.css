@@ -353,7 +353,7 @@ html.motion .truths__track { animation: truthsDrift 46s linear infinite; }
   font-family: var(--f-mono); font-size: var(--t-m); letter-spacing: 0.02em;
   color: var(--c-fg); white-space: nowrap;
 }
-.truths__item:nth-child(even) { color: var(--c-muted); opacity: 0.55; }
+.truths__item:nth-child(even) { color: var(--c-muted); }
 
 /* closing cta: dark poster band, blurred plate, circular lime exit */
 .cta { position: relative; overflow: clip; background: var(--c-fg); margin-top: calc(var(--u) * 8); }
