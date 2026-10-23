@@ -197,7 +197,7 @@ export function Wall() {
       {items.length === 0 ? (
         <p className="wall__empty" data-reveal="fade">
           The wall is empty. Generate an image and use &ldquo;Add to the wall&rdquo;, or add plates in{' '}
-          <a className="link" href="/admin">admin</a>.
+          <a className="link" href="/subhan">admin</a>.
         </p>
       ) : (
         <div className="wall__deck">

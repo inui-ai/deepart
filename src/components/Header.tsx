@@ -15,7 +15,7 @@ const NAV = [
   { label: 'Gallery', href: '/#gallery' },
 ] as const;
 
-const CRUMB: Record<string, string> = { '/': 'Home', '/generate': 'Generate', '/admin': 'Admin' };
+const CRUMB: Record<string, string> = { '/': 'Home', '/generate': 'Generate', '/subhan': 'Admin' };
 
 export function Header() {
   const pathname = usePathname() || '/';

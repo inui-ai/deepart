@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
 import { readFileSync } from 'node:fs';
 
 const STORE = readFileSync('.shots/feature/store.json', 'utf8');
-const PAGES = ['/', '/generate', '/admin'];
+const PAGES = ['/', '/generate', '/subhan'];
 const browser = await chromium.launch();
 const out = { A: {}, B: {} };
 

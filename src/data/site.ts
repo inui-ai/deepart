@@ -1,8 +1,8 @@
 // Assumptions (marked everywhere said, mirrored in the final message):
-// - The brand name "DeepArt" comes from the project folder; the owner can change it here and in /admin.
+// - The brand name "DeepArt" comes from the project folder; the owner can change it here and in /subhan.
 // - The production URL is a placeholder (https://deepart.local); replace when deploying.
 // - The seeded gallery and the sample ad are Pollinations renders of fixed prompts + seeds:
-//   they demonstrate the design and are meant to be replaced via /admin.
+//   they demonstrate the design and are meant to be replaced via /subhan.
 // - Seeded models are Pollinations' keyless Flux and Turbo endpoints.
 
 const POLL = 'https://image.pollinations.ai/prompt';
@@ -120,7 +120,7 @@ const seed: Store = {
   ads: [
     {
       id: 'ad-sample',
-      headline: 'This spot is yours. Add an ad in /admin and it lives here.',
+      headline: 'This spot is yours. Add an ad in /subhan and it lives here.',
       link: '#',
       imageUrl: pollUrl('wide minimal abstract poster, lime and ink flat shapes, print grain', 4277, 1200, 260),
       placement: 'home-strip',

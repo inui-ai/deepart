@@ -3,7 +3,7 @@
 A browser-native AI image sampler. Type a prompt, watch the render resolve out of grain
 in steps, and hang the result on your wall. No login, no backend: everything a visitor
 needs is this machine's `localStorage` (`deepart:v1`) and the keyless Pollinations.ai
-image endpoint. Three pages: the wall (`/`), the sampler (`/generate`), and admin (`/admin`),
+image endpoint. Three pages: the wall (`/`), the sampler (`/generate`), and admin (`/subhan`, unlisted),
 plus a 404 that never converged.
 
 ## Run it

@@ -7,7 +7,8 @@ Brief + system doc for the build. Consumed by every later pass.
 - **Subject:** DeepArt, a browser-native AI image generator (Pollinations.ai under the hood).
 - **Audience:** anyone who wants images from a prompt: designers, hobbyists, the curious.
 - **The site's job:** let a visitor generate an image in under 10 seconds, browse the gallery,
-  and manage content from `/admin` (models, ads, gallery) — all without login or a backend.
+  and manage content from `/subhan` — the unlisted admin route (models, ads, gallery),
+  all without login or a backend.
 - **Style brief (user-locked):** clean, white, lime accent, "like SaaS".
 - **Constraints:** no login, no database; state in localStorage; images via Pollinations URLs.
 - **Language:** English. **Assumptions:** brand name DeepArt (folder name); seeded gallery/

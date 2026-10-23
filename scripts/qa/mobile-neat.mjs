@@ -8,7 +8,7 @@ const browser = await chromium.launch();
 const pages = [
   ['/', 'home'],
   ['/generate', 'generate'],
-  ['/admin', 'admin'],
+  ['/subhan', 'admin'],
   ['/__no-such-page-mobile', '404'],
 ];
 const widths = [[390, 844], [360, 760]];
