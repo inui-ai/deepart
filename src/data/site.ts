@@ -114,7 +114,7 @@ const seed: Store = {
       link: '#',
       imageUrl: pollUrl('wide minimal abstract poster, lime and ink flat shapes, print grain', 4277, 1200, 260),
       placement: 'home-strip',
-      active: false,
+      active: true,
     },
   ],
   history: [],
