@@ -15,7 +15,9 @@ export function pollUrl(prompt: string, seed: number, w: number, h: number, mode
 export const site = {
   name: 'DeepArt',
   action: 'Generate',
-  url: 'http://127.0.0.1:4400', // ship placeholder: the QA/ship host, used for canonical, OG and sitemap. Replace on real deploy.
+  // ship host: canonical, OG and sitemap. Set NEXT_PUBLIC_SITE_URL on the host
+  // (e.g. the Vercel domain) to override; the local default keeps QA honest.
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'http://127.0.0.1:4400',
   description:
     'DeepArt is a browser-native image sampler: type a few words, pick a model, watch the render resolve. No login, no account, everything stays on your machine.',
   year: new Date().getFullYear(),
