@@ -13,7 +13,6 @@ import { site } from '@/data/site';
 const NAV = [
   { label: 'Generate', href: '/generate' },
   { label: 'Gallery', href: '/#gallery' },
-  { label: 'Admin', href: '/admin' },
 ] as const;
 
 const CRUMB: Record<string, string> = { '/': 'Home', '/generate': 'Generate', '/admin': 'Admin' };

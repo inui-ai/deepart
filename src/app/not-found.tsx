@@ -12,14 +12,14 @@ export default function NotFound() {
         <figcaption className="plate__spec">
           <span>did not converge</span>
           <span>seed undefined</span>
-          <span>pages: /, /generate, /admin</span>
+          <span>pages: /, /generate</span>
         </figcaption>
       </figure>
       <h1 className="lost__title">This page ran out of focus.</h1>
       <p className="lost__sub">
-        The address resolved to nothing. The visible site stays on three pages: the{' '}
-        <Link className="link" href="/">gallery</Link>, the <Link className="link" href="/generate">sampler</Link> and{' '}
-        <Link className="link" href="/admin">admin</Link>.
+        The address resolved to nothing. The visible site stays on two pages: the{' '}
+        <Link className="link" href="/">gallery</Link> and the{' '}
+        <Link className="link" href="/generate">sampler</Link>.
       </p>
       <Link href="/" className="btn btn--solid" data-fill data-no-transition>
         <span aria-hidden="true" className="btn__fill" />

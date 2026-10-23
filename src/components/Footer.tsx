@@ -10,7 +10,6 @@ export function Footer() {
           {[
             { label: 'Generate', href: '/generate' },
             { label: 'The gallery', href: '/#gallery' },
-            { label: 'Admin', href: '/admin' },
           ].map((item) => (
             <Link key={item.href} className="roll footer__link" href={item.href}>
               <span>{item.label}</span>
