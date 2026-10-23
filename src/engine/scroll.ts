@@ -57,3 +57,19 @@ export function scrollToTarget(target: string | HTMLElement | number) {
   else if (typeof target === 'number') scrollTo({ top: target });
   else (typeof target === 'string' ? document.querySelector(target) : target)?.scrollIntoView();
 }
+
+/** A URL hash came across a navigation (/#gallery): land on its target, not at the
+ *  top. Runs under the enter curtain, so the reposition is never seen. */
+export function jumpToHash() {
+  const { hash } = location;
+  if (!hash) return false;
+  const el = document.querySelector(hash);
+  if (!el) return false;
+  lenis?.resize(); // the just-swapped document may not have measured yet
+  const y = el.getBoundingClientRect().top + window.scrollY;
+  if (lenis) lenis.scrollTo(y, { immediate: true, force: true });
+  else scrollTo(0, y);
+  state.y = y;
+  state.velocity = 0;
+  return true;
+}

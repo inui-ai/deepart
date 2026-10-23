@@ -77,9 +77,11 @@ body { font-size: var(--t-body); }
 
 @media (max-width: 519px) { .frame__page { display: none; } }
 
-/* the menu overlay: ink field, links as poster type */
+/* the menu overlay: ink field, links as poster type; links hug their text so the
+   focus ring marks the word, not a stripe across the whole viewport */
 .menu {
   position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column;
+  align-items: flex-start;
   justify-content: center; gap: calc(var(--u) * 2.5); padding: var(--gutter);
   background: var(--c-fg); color: var(--c-bg);
 }

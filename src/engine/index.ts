@@ -8,14 +8,14 @@
 // No WebGL in this project: the GL module was removed.
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { initScroll, resetScroll, startScroll, stopScroll } from './scroll';
+import { initScroll, jumpToHash, resetScroll, startScroll, stopScroll } from './scroll';
 import { initReveals } from './reveal';
 import { initCursor, initMagnetic } from './interactions';
 import { runLoader } from './loader';
 import { playEnter, playLeave } from './transition';
 import { prefersReducedMotion } from './env';
 
-export { onScroll, scrollState, scrollToTarget, stopScroll, startScroll } from './scroll';
+export { onScroll, scrollState, scrollToTarget, jumpToHash, stopScroll, startScroll } from './scroll';
 export { setTransition } from './transition';
 export { setLoaderFormat, setLoaderExit } from './loader';
 export { ease, isTouch, isMobile, prefersReducedMotion } from './env';
@@ -96,8 +96,11 @@ export function cleanup() {
 export async function enter({ transition = true, scrollTop = true } = {}) {
   if (!booted) return;
   cleanup(); // no-op if the adapter already cleaned up
-  if (scrollTop) resetScroll();
+  if (scrollTop && !location.hash) resetScroll();
   initPage();
+  // Fresh navigation carrying a hash (/​#gallery from another page): position it
+  // now, still under the curtain — resetScroll would have erased the target.
+  if (scrollTop && location.hash) jumpToHash();
   if (transition) await playEnter();
   startScroll();
   intro?.play();
