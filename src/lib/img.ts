@@ -1,7 +1,9 @@
 // Pollinations' anonymous tier throttles fresh generations (HTTP 402) but serves cached
-// URLs freely, and a failed request clears in a moment. So a broken image first retries
-// its exact URL, and only then gives up to the broken-state styling.
+// URLs freely — the throttle lifts within ~45 s. A broken image therefore retries its
+// exact URL on a widening ladder (8 s / 22 s / 40 s) before giving up to broken styling.
 'use client';
+
+const WAITS_MS = [8000, 22000, 40000];
 
 export function retryableImgError(retries = 2, onFinal?: () => void) {
   return (e: { currentTarget: HTMLImageElement }) => {
@@ -14,7 +16,7 @@ export function retryableImgError(retries = 2, onFinal?: () => void) {
       window.setTimeout(() => {
         img.src = '';
         img.src = original; // same URL: the cache answers the moment the throttle lifts
-      }, 3200 + n * 3200);
+      }, WAITS_MS[Math.min(n, WAITS_MS.length - 1)]);
     } else {
       img.closest('.plate, figure')?.classList.add('is-broken');
       onFinal?.();

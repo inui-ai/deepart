@@ -16,11 +16,11 @@ export function setupMotion() {
     const name = root.querySelector('[data-loader-out]:not([data-loader-count])');
     const flash = root.querySelector('.loader__flash');
     return gsap.timeline()
-      .to(count, { yPercent: -110, duration: 0.5, ease: ease.inOut })
-      .to(name as Element, { yPercent: -110, duration: 0.6, ease: ease.inOut }, '<0.08')
+      .to(count, { yPercent: -110, duration: 0.35, ease: ease.inOut })
+      .to(name as Element, { yPercent: -110, duration: 0.45, ease: ease.inOut }, '<0.06')
       .set(flash as Element, { scaleX: 1, transformOrigin: 'left center', duration: 0.01 })
-      .to(root, { clipPath: 'inset(0% 0% 100% 0%)', duration: 0.8, ease: ease.inOut }, '-=0.05')
-      .to(flash as Element, { scaleX: 0.2, duration: 0.9, ease: ease.inOut }, '<');
+      .to(root, { clipPath: 'inset(0% 0% 100% 0%)', duration: 0.6, ease: ease.inOut }, '-=0.05')
+      .to(flash as Element, { scaleX: 0.2, duration: 0.7, ease: ease.inOut }, '<');
   });
 
   // Page transition: an ink panel with a lime hairline edge wipes up, then lifts off.

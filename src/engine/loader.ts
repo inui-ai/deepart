@@ -11,8 +11,9 @@ let exit: ((root: HTMLElement) => gsap.core.Timeline) | null = null;
 /** Replace the exit choreography (the loader → hero handoff). Return a timeline. */
 export const setLoaderExit = (fn: (root: HTMLElement) => gsap.core.Timeline) => { exit = fn; };
 
-const MIN = 1.1; // seconds: long enough to read as a designed moment
-const MAX = 2.6; // seconds: a longer loader is a usability problem
+const MIN = 0.8; // seconds: long enough to read as a designed moment
+const MAX = 1.2; // seconds: the wait is capped there so the whole gate stays under ~2.5 s
+const SKIP_KEY = 'deepart:booted';
 
 function criticalAssets(): Promise<unknown>[] {
   const imgs = [...document.querySelectorAll<HTMLImageElement>('img[data-critical], [data-intro] img, [data-gl-instant] img')];
@@ -22,6 +23,11 @@ function criticalAssets(): Promise<unknown>[] {
 export async function runLoader(): Promise<void> {
   const root = document.getElementById('loader');
   if (!root) return;
+  // One designed moment per session: further loads in this browser go straight to the page.
+  try {
+    if (sessionStorage.getItem(SKIP_KEY)) { finish(root); return; }
+    sessionStorage.setItem(SKIP_KEY, '1');
+  } catch { /* storage may refuse; the loader still runs */ }
   if (prefersReducedMotion()) {
     await Promise.race([Promise.all(criticalAssets()), wait(MAX)]);
     await gsap.to(root, { autoAlpha: 0, duration: 0.3 });

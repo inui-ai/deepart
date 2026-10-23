@@ -98,7 +98,7 @@ export function Wall() {
                 data-cursor="View"
               >
                 <span className="plate__media">
-                  <img data-src={item.url} alt={item.title} decoding="async" width={768} height={768} onError={retryableImgError(2)} />
+                  <img data-src={item.url} alt={item.title} decoding="async" width={768} height={768} onError={retryableImgError(3)} />
                   <span className="plate__noise" aria-hidden="true" />
                   <span className="plate__flash" aria-hidden="true" />
                 </span>

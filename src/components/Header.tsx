@@ -1,5 +1,5 @@
 'use client';
-// The four-corner frame: brand top-left, nav top-right, context bottom-left, action bottom-right.
+// The four-corner frame: brand top-left, nav top-right, action bottom-right.
 // Fixed, but the corner zones stay empty in main content. On phones: brand + one Menu button.
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -13,19 +13,11 @@ const NAV = [
   { label: 'Admin', href: '/admin' },
 ] as const;
 
-function routeLabel(path: string) {
-  if (path.startsWith('/admin')) return 'admin';
-  if (path.startsWith('/generate')) return 'generate';
-  if (path !== '/') return 'lost';
-  return 'wall';
-}
-
 export function Header() {
   const pathname = usePathname() || '/';
   const [open, setOpen] = useState(false);
   const panel = useRef<HTMLElement>(null);
   const btn = useRef<HTMLButtonElement>(null);
-
   // Escape closes the menu; focus handoff loops between the links while open.
   useEffect(() => {
     if (!open) return;
@@ -44,8 +36,6 @@ export function Header() {
     document.addEventListener('keydown', onKey);
     return () => { document.removeEventListener('keydown', onKey); startScroll(); };
   }, [open]);
-
-  const ctx = routeLabel(pathname);
 
   return (
     <header className="frame" data-frame>
@@ -68,7 +58,6 @@ export function Header() {
           </Link>
         ))}
       </nav>
-      <p className="frame__bl frame__meta"><span data-frame-ctx={ctx}>{ctx}</span>&thinsp;&middot;&thinsp;local sampler</p>
       <div className="frame__br">
         {pathname !== '/generate' ? (
           <Link href="/generate" className="btn btn--solid frame__cta" data-fill>

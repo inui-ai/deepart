@@ -132,7 +132,8 @@ footer (poster finale):
   giant DeepArt line, link row, small print
 GENERATE (sticky narrative):
   left: controls (prompt textarea, model select, size, seed, CTA)
-  right: sticky resolve stage + typed readout; history strip below (scroll-snap row on phones)
+  right: sticky resolve stage + typed readout (the canvas is fixed wide, 16:9; every render
+       letterboxes inside it, never outgrowing the area); history strip below (scroll-snap row on phones)
 ADMIN (data/facts instrument):
   tab bar + tables, mono headers, quiet motion
 404: "did not converge" noise plate, spec line, link home

@@ -130,7 +130,7 @@ export function Generate() {
     // a retry on the exact URL usually lands once the limiter cools.
     const img = imgRef.current;
     const n = Number(img.dataset.retryN ?? '0');
-    const waits = [8000, 22000];
+    const waits = [8000, 22000, 40000];
     if (n < waits.length) {
       img.dataset.retryN = String(n + 1);
       window.setTimeout(() => {
@@ -259,7 +259,7 @@ export function Generate() {
 
       <div className="gen__stagecol">
         <div className={`plate gen__stage gen__stage--${status}`} ref={stageRef}>
-          <div className="plate__media" style={{ aspectRatio: `${active?.w ?? size.w} / ${active?.h ?? size.h}` }}>
+          <div className="plate__media">
             <img
               ref={imgRef}
               src={active?.url}
