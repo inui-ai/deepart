@@ -105,13 +105,13 @@ markers. One committed theme (light). One accent, used rarely and semantically.
 HOME
 hero (split frame):
 
-  | 1 2 3 4 | 5 | 6 7 8 9 10 11 12 |
-  | EYEBROW        |  [hero plate image       ]
-  | MAKING PICTURES|  [edge-to-edge right     ]
-  | OUT OF NOISE.  |  [render, resolves in    ]
-  |                |  [on load                ]
-  | sub ...        |  [spec line: model·size  ]
-  | [Generate]                  |            UTILITY NAV      |
+  | 1 2 3 4 5 6 | 7 8 9 10 11 12 |
+  | EYEBROW            |  [hero plate image       ]
+  | PICTURES           |  [edge-to-edge right     ]
+  | OUT OF NOISE.      |  [render, resolves in    ]  ← title ~clamp(3rem, 7.2vw, 7.4rem),
+  | sub ...            |  [on load + the headline    resolves from blur on motion,
+  | [Generate] · words →    itself blurs in from   noise→sharp in one pass]
+  |  sampler 14 → plate|  [spec line: model·size  ]
 
   Phones: the columns stack with the plate FIRST (poster above type) so the first
   paint and the LCP are the render itself, not the copy.
@@ -119,14 +119,22 @@ hero (split frame):
   corner frame: TL DeepArt - TR Nav (Generate/Wall/Admin) — the top bar anchors to the
   page (scrolls away, never prints over content); Menu pill stays fixed bottom-right
   (small screens: top bar + menu overlay)
-gallery (gallery wall):
 
-  | 1-3  title | [p1 5cols]  [p2 4cols off]        |
-  |            |      spec           spec          |
-  |  index col | [p3 4cols off]  [p4 5cols]        |
-  |  meta      |      spec                          |
-  | (masonry wall with deliberate empty cells;  |
-  |  family: gallery wall)                       |
+the run (3-step band, hairline top):
+  | 01 WORDS IN      | 02 THE SAMPLER RUNS | 03 PLATE OUT      |
+  | type one line;   | flux denoises 14    | finished picture, |
+  | optional seed    | steps in-browser    | spec in margin    |
+  (span-4 each; span-6 ≤1023; full ≤639)
+
+wall (screening strip — a film leader, not a mosaic):
+
+  | eyebrow · title · index (seeded · local only · scroll sideways)   |
+  |[frame 01][frame 02][frame 03][frame 04]→  … full plates, scroll-x |
+  |  title/spec under each: num | title · tag · model · seed          |
+  | [←] [→]  ───────────▪ progress hairline ──────────   03/8 counter |
+  Each frame keeps its NATURAL ratio on a fixed height (clamp 340–620px, aspect from
+  the URL width/height), numbered in the margin; scroll-snap x proximity, drag/scrub
+  with suspend-on-grab, arrows + keyboard steps, click opens the lightbox.
 footer (poster finale):
   giant DeepArt line, link row, small print
 GENERATE (sticky narrative):

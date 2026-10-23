@@ -24,6 +24,7 @@ export function Hero({ hero }: { hero: HeroContent }) {
             <span className="btn__fill" aria-hidden="true" />
             {site.action}
           </Link>
+          <p className="hero__steps">words in &rarr; sampler, 14 steps &rarr; plate out</p>
         </div>
       </div>
       <figure className="plate hero__plate" data-resolve data-intro>
