@@ -23,7 +23,7 @@ export default function NotFound() {
       </p>
       <Link href="/" className="btn btn--solid" data-fill data-no-transition>
         <span aria-hidden="true" className="btn__fill" />
-        Back to the wall
+        Back to the gallery
       </Link>
     </section>
   );

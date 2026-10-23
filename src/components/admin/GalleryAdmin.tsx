@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 // Wall admin: reorder, retitle, retag, delete; add a plate by URL paste or by rendering one
-// on the spot. The wall order is the array order (first item is the first plate on home).
+// on the spot. The Gallery order is the array order (first item is the first plate on home).
 import { useEffect, useState } from 'react';
 import { buildUrl, mutate, uid, useStore } from '@/lib/store';
 import { toast } from '@/lib/toast';
@@ -46,7 +46,7 @@ export function GalleryAdmin() {
         addedAt: Date.now(),
       });
     });
-    if (ok) { toast('Plate added at the top of the wall.', 'ok'); setFTitle(''); setFTag(''); setFUrl(''); }
+    if (ok) { toast('Plate added at the top of the gallery.', 'ok'); setFTitle(''); setFTag(''); setFUrl(''); }
     else toast('Added for this visit, but the browser refused to save it.', 'warn');
   }
 
@@ -69,7 +69,7 @@ export function GalleryAdmin() {
         addedAt: Date.now(),
       });
     });
-    if (ok) toast('Plate added at the top of the wall.', 'ok');
+    if (ok) toast('Plate added at the top of the gallery.', 'ok');
     else toast('Added for this visit, but the browser refused to save it.', 'warn');
   }
 
@@ -83,7 +83,7 @@ export function GalleryAdmin() {
   }
 
   function remove(i: number) {
-    if (!window.confirm('Delete this plate from the wall?')) return;
+    if (!window.confirm('Delete this plate from the gallery?')) return;
     mutate((d) => { d.gallery.splice(i, 1); });
     toast('Plate removed.', 'ok');
   }
@@ -157,10 +157,10 @@ export function GalleryAdmin() {
         )}
       </Row>
 
-      <h3 className="adm__h3">Wall order ({s.gallery.length})</h3>
+      <h3 className="adm__h3">Gallery order ({s.gallery.length})</h3>
 
       {s.gallery.length === 0 ? (
-        <p className="adm__note">No plates yet. Add one above; the home page wall will show it.</p>
+        <p className="adm__note">No plates yet. Add one above; the home page gallery will show it.</p>
       ) : (
         <ol className="adm__list">
           {s.gallery.map((g, i) => (

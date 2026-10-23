@@ -614,6 +614,11 @@ html.motion .truths__track { animation: truthsDrift 46s linear infinite; }
   .gen { grid-template-columns: 1fr; }
 }
 
+/* the stage clears the taller reworked top bar on phones */
+@media (max-width: 767px) {
+  .genpage { padding-top: calc(var(--u) * 12); }
+}
+
 /* ---------------------------------------------------------------- ad slots */
 
 .ad { position: relative; display: block; }

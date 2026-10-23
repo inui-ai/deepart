@@ -11,7 +11,7 @@ export type AdminTab = 'overview' | 'wall' | 'models' | 'ads';
 
 const TABS: { id: AdminTab; label: string }[] = [
   { id: 'overview', label: 'Overview' },
-  { id: 'wall', label: 'Wall' },
+  { id: 'wall', label: 'Gallery' },
   { id: 'models', label: 'Models' },
   { id: 'ads', label: 'Ads' },
 ];

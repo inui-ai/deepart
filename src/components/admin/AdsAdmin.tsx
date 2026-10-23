@@ -8,7 +8,7 @@ import { pollUrl, type Ad } from '@/data/site';
 import { AdminField, QuietBtn, Row, Stack, Toggle } from './kit';
 
 const PLACEMENTS: { value: Ad['placement']; label: string }[] = [
-  { value: 'home-strip', label: 'Home, between hero and wall' },
+  { value: 'home-strip', label: 'Home strip (retired; the sampler sidebar is live)' },
   { value: 'generate-sidebar', label: 'Generate, right rail' },
 ];
 

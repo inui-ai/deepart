@@ -173,7 +173,7 @@ export function Generate() {
         addedAt: Date.now(),
       });
     });
-    toast(ok ? 'Added to the wall. It is live on the home page now.' : 'Added for this visit, but the browser refused to save it.', ok ? 'ok' : 'warn');
+    toast(ok ? 'Added to the gallery. It is live on the home page now.' : 'Added for this visit, but the browser refused to save it.', ok ? 'ok' : 'warn');
   }
 
   return (
@@ -294,8 +294,8 @@ export function Generate() {
             <span aria-hidden="true">Download</span>
           </button>
           <button type="button" className="roll" onClick={addToWall} disabled={status !== 'done'}>
-            <span>Add to the wall</span>
-            <span aria-hidden="true">Add to the wall</span>
+            <span>Add to the gallery</span>
+            <span aria-hidden="true">Add to the gallery</span>
           </button>
         </div>
       </div>
@@ -318,7 +318,7 @@ export function Generate() {
               </li>
             ))}
           </ul>
-          <Link className="link gen__walllink" href="/#wall">See the wall</Link>
+          <Link className="link gen__walllink" href="/#gallery">See the gallery</Link>
         </section>
       ) : null}
     </div>

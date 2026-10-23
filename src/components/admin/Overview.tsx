@@ -48,7 +48,7 @@ export function Overview() {
   return (
     <Stack>
       <div className="adm__stats">
-        <N value={s.gallery.length} label="Plates on the wall" />
+        <N value={s.gallery.length} label="Plates in the gallery" />
         <N value={s.models.length} label="Models" />
         <N value={s.ads.filter((a) => a.active).length} label="Live ads" />
         <N value={s.usage.generations} label="Generations" />
