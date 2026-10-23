@@ -18,7 +18,7 @@ export function Hero({ hero }: { hero: HeroContent }) {
     <section className="hero" aria-labelledby="hero-title">
       <header className="hero__head">
         <p className="hero__eyebrow" data-reveal="fade" data-intro data-delay="0.2">{hero.eyebrow}</p>
-        <p className="hero__meta" data-reveal="fade" data-intro data-delay="0.2">flux &middot; 14 steps &middot; local only</p>
+        <p className="hero__meta" data-reveal="fade" data-intro data-delay="0.2">unlimited free image generation</p>
       </header>
       <h1 id="hero-title" className="hero__title">{hero.headline}</h1>
       <div className="hero__row">
@@ -30,7 +30,7 @@ export function Hero({ hero }: { hero: HeroContent }) {
             <span className="btn__fill" aria-hidden="true" />
             {site.action}
           </Link>
-          <p className="hero__steps">words in &rarr; sampler, 14 steps &rarr; plate out</p>
+          <p className="hero__steps">no account &middot; no credits &middot; type and render</p>
         </div>
       </div>
       <figure className="plate hero__plate" data-resolve data-intro style={{ '--ar': `${W} / ${H}` } as CSSProperties}>
