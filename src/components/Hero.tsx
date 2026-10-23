@@ -4,16 +4,16 @@
 // with a glass card parked on it. The card carries the promise the old corner type had.
 import type { CSSProperties } from 'react';
 import Link from 'next/link';
-import { HERO_PROMPT, pollUrl, site, type HeroContent } from '@/data/site';
-import { retryableImgError } from '@/lib/img';
+import { HERO_URL, site, type HeroContent } from '@/data/site';
 import { useStore } from '@/lib/store';
 
 const W = 1600;
-const H = 680; // 21:9 poster ratio, the intended hero crop, near-zero crop on render
+const H = 680; // 21:9 poster frame; the file covers through object-fit, no distortion
+// matched to the actual file public/hero-flock.jpg (the re-encoded reference, see assets/)
+const IW = 2400;
+const IH = 1340;
 
 export function Hero({ hero }: { hero: HeroContent }) {
-  const src = pollUrl(HERO_PROMPT, hero.seed, W, H);
-
   return (
     <section className="hero" aria-labelledby="hero-title">
       <h1 id="hero-title" className="hero__title">
@@ -23,13 +23,12 @@ export function Hero({ hero }: { hero: HeroContent }) {
       <figure className="plate hero__plate" data-resolve data-intro style={{ '--ar': `${W} / ${H}` } as CSSProperties}>
         <div className="plate__media">
           <img
-            src={src}
-            alt="Cinematic dawn over the seeded hills: one of the DeepArt plates"
-            width={W}
-            height={H}
+            src={HERO_URL}
+            alt="Reference plate: dawn over dark green rolling hills with a flock of white birds"
+            width={IW}
+            height={IH}
             fetchPriority="high"
             decoding="async"
-            onError={retryableImgError(3)}
           />
           <div className="plate__noise" aria-hidden="true" />
           <div className="plate__flash" aria-hidden="true" />
@@ -48,9 +47,9 @@ export function Hero({ hero }: { hero: HeroContent }) {
           </div>
         </div>
         <figcaption className="plate__spec">
-          <span>flux</span>
-          <span>{W}&times;{H}</span>
-          <span>seed {hero.seed}</span>
+          <span>reference</span>
+          <span>{IW}&times;{IH}</span>
+          <span>kept local</span>
         </figcaption>
       </figure>
     </section>

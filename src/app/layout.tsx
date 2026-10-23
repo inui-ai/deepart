@@ -5,7 +5,7 @@ import { FooterGate } from '@/components/FooterGate';
 import { Motion } from '@/components/Motion';
 import { StoreSync } from '@/components/StoreSync';
 import { Toaster } from '@/components/Toaster';
-import { HERO_PROMPT, pollUrl, seedStore, site } from '@/data/site';
+import { HERO_URL, site } from '@/data/site';
 import { switzer, fragment } from './fonts';
 import './globals.css';
 
@@ -25,10 +25,9 @@ export const metadata: Metadata = {
 // Runs before first paint: hidden-until-revealed styles only apply when JS and motion are on.
 const flags = `document.documentElement.classList.add('js');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('motion')`;
 
-// Warm-cache hint for the hero render: the seeded URL is a fixed key the sampler serves
-// from its cache, so discovery starts at connection time, not image-parse time.
-// Must match the exact URL the hero <img> requests below (1600x680 plate).
-const heroPreload = pollUrl(HERO_PROMPT, seedStore.hero.seed, 1600, 680);
+// Warm-cache hint for the hero plate: the owner's reference file served from /public.
+// Must match the exact URL the hero <img> requests (same string from site.ts).
+const heroPreload = HERO_URL;
 
 const jsonLd = {
   '@context': 'https://schema.org',

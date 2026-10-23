@@ -24,8 +24,8 @@ for (let i = 1; i <= 7; i++) {
       for (let k = 0; k < d.length; k += 4) { r += d[k]; g += d[k + 1]; b += d[k + 2]; }
       res({ w: i.naturalWidth, h: i.naturalHeight, r: Math.round(r / n), g: Math.round(g / n), b: Math.round(b / n) });
     }));
-    const placeholder = sample.r > 175 && sample.g > 135 && sample.b < 115 && sample.b < sample.g - 40;
-    console.log(`attempt ${i}: ${JSON.stringify(sample)} ${placeholder ? '-> placeholder, retry in 50s' : '-> REAL RENDER'}`);
+    const placeholder = !(sample.w === 1600 && sample.h === 680);
+    console.log(`attempt ${i}: ${JSON.stringify(sample)} ${placeholder ? '-> not the expected 1600x680 render, retry in ~46s' : '-> REAL RENDER'}`);
     if (!placeholder) { await ctx.close(); console.log('OK'); await browser.close(); process.exit(0); }
   } catch (e) {
     console.log(`attempt ${i}: ${String(e).slice(0, 80)} retry in 50s`);
