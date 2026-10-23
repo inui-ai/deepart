@@ -1,6 +1,7 @@
 'use client';
-// The four-corner frame: brand top-left, nav top-right, action bottom-right.
-// Fixed, but the corner zones stay empty in main content. On phones: brand + one Menu button.
+// The corner frame: brand + primary nav along the top — it scrolls away with the page,
+// so nothing ever prints over content. The Menu pill stays a fixed corner utility.
+// On phones the top bar is brand only; navigation lives in the menu overlay.
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -59,12 +60,6 @@ export function Header() {
         ))}
       </nav>
       <div className="frame__br">
-        {pathname !== '/generate' ? (
-          <Link href="/generate" className="btn btn--solid frame__cta" data-fill>
-            <span className="btn__fill" aria-hidden="true" />
-            Generate
-          </Link>
-        ) : null}
         <button
           ref={btn}
           type="button"

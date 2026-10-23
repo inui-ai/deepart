@@ -41,6 +41,8 @@ export function hydrate() {
     } else {
       const parsed = parsePersisted(raw);
       snapshot = parsed ?? cloneStore(seedStore); // corrupt or blocked: keep the seed
+      // persist the adopted copy: migration (history dedupe) heals polluted storage too
+      try { ls.setItem(KEY, JSON.stringify(snapshot)); } catch { /* read-only storage keeps in-memory state */ }
     }
   } catch {
     snapshot = cloneStore(seedStore); // storage unavailable: keep the seed, keep the site up
@@ -106,7 +108,13 @@ function migrate(v: Store): Store {
   const s: Store = { ...cloneStore(seedStore), ...v, version: 1 };
   s.hero = { ...seedStore.hero, ...v.hero };
   s.usage = { ...seedStore.usage, ...v.usage };
-  s.history = Array.isArray(v.history) ? v.history : [];
+  // history is newest-first and unique by URL: a rerun re-places its strip instead of
+  // stacking copies, and persisted stores polluted by the old behavior heal on load.
+  s.history = Array.isArray(v.history)
+    ? v.history
+      .filter((h, i) => !!h && typeof (h as { url?: unknown }).url === 'string' && v.history.findIndex((g) => g?.url === h.url) === i)
+      .slice(0, 12)
+    : [];
   return s;
 }
 

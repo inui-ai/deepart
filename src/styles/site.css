@@ -9,8 +9,10 @@ body { font-size: var(--t-body); }
 
 /* ---------------------------------------------------------------- corner frame (header) */
 
+/* The top bar anchors to the PAGE (not the viewport): it scrolls away with the content,
+   so the corner type never prints over what you are reading. The Menu pill stays fixed. */
 .frame {
-  position: fixed; inset: auto 0 0 0; top: 0;
+  position: absolute; inset: 0 0 auto 0;
   display: grid; grid-template-columns: 1fr 1fr; align-items: start;
   padding: var(--gutter); z-index: var(--z-header); pointer-events: none;
 }
@@ -18,23 +20,11 @@ body { font-size: var(--t-body); }
 .frame__tl { justify-self: start; }
 .frame__tr { justify-self: end; display: flex; gap: calc(var(--u) * 2); align-items: center; }
 .frame__br {
-  position: absolute; bottom: var(--gutter); right: var(--gutter);
+  position: fixed; bottom: var(--gutter); right: var(--gutter);
   display: flex; gap: calc(var(--u) * 1.5); align-items: center;
   transition: translate 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 html.frame-away .frame__br { translate: 0 260%; }
-/* scrolled down, the brand steps aside too: nothing prints over the reader's text */
-.frame__tl { transition: opacity 0.4s ease; }
-html.frame-away .frame__tl { opacity: 0; pointer-events: none; }
-
-/* A short veil under the fixed frame: content that slides beneath it fades away
-   instead of colliding with the corner type. */
-body::before {
-  content: ''; position: fixed; inset: 0 0 auto 0; height: clamp(3.5rem, 9vw, 5.5rem);
-  background: linear-gradient(to bottom, var(--c-bg), color-mix(in srgb, var(--c-bg) 0%, transparent));
-  z-index: calc(var(--z-header) - 1); pointer-events: none;
-}
-.frame__cta { font-size: var(--t-s); }
 
 .brand { font-weight: 600; font-size: var(--t-s); letter-spacing: -0.01em; }
 .brand__dot {
@@ -71,7 +61,6 @@ body::before {
   .nav { display: none; }
   .frame__menu { display: inline-flex; }
   /* phones lose the corner chrome: the hero carries its own CTAs, the menu holds navigation */
-  .frame .frame__cta { display: none; }
 }
 
 /* the one nav treatment: the inner span rolls. Padding keeps tap targets at 24px+. */
@@ -216,7 +205,6 @@ html.motion .hero__plate[data-resolved='true'] .plate__noise {
 }
 .hero__sub { max-width: 34rem; color: var(--c-muted); font-size: var(--t-m); line-height: 1.45; }
 .hero__cta { display: flex; gap: calc(var(--u) * 2.5); align-items: center; margin-top: calc(var(--u) * 4); }
-.hero__secondary { font-weight: 500; font-size: var(--t-body); }
 .hero__plate { grid-column: 7 / 13; align-self: center; }
 .hero__plate .plate__media { aspect-ratio: 1000 / 1200; }
 
@@ -240,7 +228,6 @@ html.motion .hero__plate[data-resolved='true'] .plate__noise {
   .hero__sub { display: none; }
   .hero__plate { margin-top: 0; }
   .hero__plate .plate__media { aspect-ratio: 4 / 3; }
-  .frame .frame__cta { display: none; }
 }
 
 /* ---------------------------------------------------------------- the wall */

@@ -24,10 +24,6 @@ export function Hero({ hero }: { hero: HeroContent }) {
             <span className="btn__fill" aria-hidden="true" />
             {site.action}
           </Link>
-          <Link href="/#wall" className="roll hero__secondary">
-            <span>Browse the wall</span>
-            <span aria-hidden="true">Browse the wall</span>
-          </Link>
         </div>
       </div>
       <figure className="plate hero__plate" data-resolve data-intro>

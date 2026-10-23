@@ -109,6 +109,8 @@ export function Generate() {
     resolveStage(stageRef.current!, el, spec(r));
     mutate((d) => {
       d.usage.generations += 1;
+      // same URL already in the list (a rerun): replace it instead of duplicating the strip
+      d.history = d.history.filter((h) => h.url !== r.url);
       d.history.unshift({
         id: Math.random().toString(36).slice(2, 10),
         prompt: r.prompt,
