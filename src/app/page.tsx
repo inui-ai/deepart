@@ -1,7 +1,7 @@
 import { HeroFromStore } from '@/components/Hero';
 import { AdSlot } from '@/components/AdSlot';
 import { Wall } from '@/components/Wall';
-import { CtaBand, RunPanel, SamplerPromo } from '@/components/Landing';
+import { CtaBand, RunPanel } from '@/components/Landing';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -17,7 +17,6 @@ export default function Home() {
       <div className="home__strip">
         <AdSlot placement="home-strip" />
       </div>
-      <SamplerPromo />
       <RunPanel />
       <Wall />
       <CtaBand />

@@ -24,15 +24,9 @@ try {
     trio: !!document.querySelector('.trio'),
   }));
 
-  out.promo = await p.evaluate(() => {
-    const card = document.querySelector('.promo__card');
-    const img = document.querySelector('.promo__media img');
-    return {
-      cardGlass: card ? getComputedStyle(card).backdropFilter : null,
-      img: img ? `${img.naturalWidth}x${img.naturalHeight}` : null,
-      link: document.querySelector('.promo__card a')?.getAttribute('href'),
-    };
-  });
+  out.promo = await p.evaluate(() => ({
+    present: !!document.querySelector('.promo'),
+  }));
 
   out.trio = null;
   out.removed2 = await p.evaluate(() => ({
@@ -96,7 +90,6 @@ try {
   writeFileSync(new URL('../../.shots/feature/landing-v4-phone.png', import.meta.url), phoneShot);
   out.phone = await p2.evaluate(() => ({
     overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
-    promoCardWidth: Math.round(document.querySelector('.promo__card').getBoundingClientRect().width),
     runCols: getComputedStyle(document.querySelector('.run__inner')).gridTemplateColumns.split(' ').length,
   }));
   out.phone.pageErrors = errs2;

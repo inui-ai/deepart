@@ -113,16 +113,13 @@ dark run panel, circular exit — all in DeepArt's own voice):
 
   Phones: head stacks, sub full width, CTA left, plate crops 4:3.
   home__strip: the ad slot
-  sampler promo: warm plate media, darkened, with a GLASS card parked on it
-  ("Everything happens here." + Open the sampler)
   run panel: dark full-bleed, "From prompt to plate in one line." + repeated-works
   copy + lime exit
   wall (screening strip): v3 film leader unchanged
   cta band: dark blurred plate, "Your next picture is one line away." + circular
   lime generate disc
 
-  Phones: the plate leads in the hero; promo stacks over the media; run panels
-  go single-col.
+  Phones: the plate leads in the hero; run panels go single-col.
 
   corner frame: TL DeepArt - TR Nav (Generate/Wall/Admin) — the top bar anchors to the
   page (scrolls away, never prints over content); Menu pill stays fixed bottom-right

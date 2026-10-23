@@ -1,31 +1,10 @@
-// The landing story, built on the reference's section grammar (glass promo, dark run
-// panel, closing CTA) — with DeepArt's own voice and tokens, nothing borrowed.
+// The landing story, built on the reference's section grammar (dark run panel,
+// closing CTA) — with DeepArt's own voice and tokens, nothing borrowed.
 import { HERO_PROMPT, pollUrl, seedStore } from '@/data/site';
 import { PlateImage } from '@/components/PlateImage';
 
 function heroPlate() {
   return pollUrl(HERO_PROMPT, seedStore.hero.seed, 1000, 1200);
-}
-
-/* ---------------------------------------------------------------- sampler promo */
-// Glass card parked over the media, the way the reference floats its product card.
-export function SamplerPromo() {
-  return (
-    <section className="promo" aria-label="The sampler">
-      <span className="promo__media" aria-hidden="true">
-        <PlateImage src={heroPlate()} alt="" width={1000} height={1200} hidden />
-      </span>
-      <div className="promo__card" data-reveal="up">
-        <p className="promo__kick">the sampler</p>
-        <h2>Everything happens here.</h2>
-        <p className="promo__body">
-          Type a line, pick a model, watch the render step out of grain in real time.
-          The page talks straight to the sampler endpoint. No account, nothing uploaded.
-        </p>
-        <a className="btn btn--solid" href="/generate">Open the sampler</a>
-      </div>
-    </section>
-  );
 }
 
 /* ---------------------------------------------------------------- run panel */
