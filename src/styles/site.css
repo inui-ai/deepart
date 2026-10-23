@@ -265,7 +265,7 @@ html.motion .hero__title { animation: titleResolve 1s cubic-bezier(0.16, 1, 0.3,
    Grammar borrowed from the reference deck: a dark run panel, one circular exit. */
 
 /* run panel: the dark statement with one lime exit */
-.run { padding: calc(var(--u) * 14) var(--gutter); }
+.run { padding: calc(var(--u) * 14) var(--gutter) calc(var(--u) * 6); }
 .run__inner {
   background: var(--c-fg); color: var(--c-bg);
   border-radius: var(--radius);
@@ -317,7 +317,7 @@ html.motion .hero__title { animation: titleResolve 1s cubic-bezier(0.16, 1, 0.3,
 /* The wall screens sideways: a film leader of full plates you scroll, drag or step
    through — no mosaic packing. Each frame keeps its natural ratio on a fixed height,
    numbered in the margin, with the run's spec stamped under it. */
-.wall { padding: calc(var(--u) * 20) 0 calc(var(--u) * 14); scroll-margin-top: var(--u); }
+.wall { padding: calc(var(--u) * 6) 0 calc(var(--u) * 14); scroll-margin-top: var(--u); }
 .wall__head { display: grid; gap: calc(var(--u) * 1.6); max-width: 44rem; padding: 0 var(--gutter); margin-bottom: calc(var(--u) * 4); }
 .wall__eyebrow {
   display: flex; align-items: center;
