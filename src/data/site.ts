@@ -21,8 +21,8 @@ export const site = {
   year: new Date().getFullYear(),
 };
 
-// The hero plate: a warm cinematic macro, the reference's close-up mood in DeepArt's voice.
-export const HERO_PROMPT = 'cinematic macro close-up of a human eye, warm film light, skin tones, shallow depth of field, fine grain';
+// The hero plate: a moody aerial dawn, the reference's dark-hills mood in DeepArt's voice.
+export const HERO_PROMPT = 'cinematic aerial view of dark emerald green rolling hills at dawn, a flock of white birds in flight, low sunrise grazing the ridge, deep moody shadows, meadow grass, fine grain';
 
 export type HeroContent = { eyebrow: string; headline: string; sub: string; seed: number };
 

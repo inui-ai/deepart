@@ -117,7 +117,8 @@ the plate, the deck: all DeepArt's own voice, paper + ink + lime):
   hero (atelier poster):
   centered two-voice headline — store headline lands washed (--c-wash), the ink echo
   "Type, render, keep and repeat." carries the verbs
-  wide 21:9 plate (the seeded macro eye render), rounded corners
+  wide 21:9 plate (the seeded aerial dawn render: dark green rolling hills,
+  a flock of white birds), rounded corners
   glass card parked bottom-left on the plate: deepart + "The open image sampler.",
   body copy (fourteen steps, stays local), Generate exit, mono promise line
   "unlimited · free · no account · no credits"

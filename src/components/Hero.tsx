@@ -24,7 +24,7 @@ export function Hero({ hero }: { hero: HeroContent }) {
         <div className="plate__media">
           <img
             src={src}
-            alt="Cinematic macro render: one of the seeded DeepArt plates"
+            alt="Cinematic dawn over the seeded hills: one of the DeepArt plates"
             width={W}
             height={H}
             fetchPriority="high"
