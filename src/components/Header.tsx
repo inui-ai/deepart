@@ -41,9 +41,8 @@ export function Header() {
   return (
     <header className="frame" data-frame>
       <div className="frame__tl">
-        <Link href="/" className="brand roll" aria-label="DeepArt home">
+        <Link href="/" className="brand" aria-label="DeepArt home">
           <span>DeepArt<i className="brand__dot" aria-hidden="true" /></span>
-          <span aria-hidden="true">DeepArt<i className="brand__dot" /></span>
         </Link>
       </div>
       <nav className="frame__tr nav" aria-label="Primary">

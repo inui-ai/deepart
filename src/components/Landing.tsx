@@ -11,19 +11,6 @@ function heroPlate() {
   return pollUrl(HERO_PROMPT, seedStore.hero.seed, 1000, 1200);
 }
 
-/* ---------------------------------------------------------------- lime interlude */
-// A full-bleed lime breath between the hero and the pitch — glyph only, no sales.
-export function BrandBand() {
-  return (
-    <section className="band" aria-label="DeepArt">
-      <div className="band__glyph" aria-hidden="true">
-        <span /><span /><span /><span />
-      </div>
-      <p className="band__cap">one line &rarr; fourteen steps &rarr; a picture</p>
-    </section>
-  );
-}
-
 /* ---------------------------------------------------------------- sampler promo */
 // Glass card parked over the media, the way the reference floats its product card.
 export function SamplerPromo() {
@@ -41,42 +28,6 @@ export function SamplerPromo() {
         </p>
         <a className="btn btn--solid" href="/generate">Open the sampler</a>
       </div>
-    </section>
-  );
-}
-
-/* ---------------------------------------------------------------- the trio */
-// Three cards that each carry a different material, like the reference trio:
-// plain / checklist / dark impact.
-export function TrioCards() {
-  return (
-    <section className="trio" aria-label="How the sampler is built">
-      <article className="trio__item" data-reveal="fade">
-        <div className="trio__card trio__card--plain" aria-hidden="true">
-          <span className="trio__dot" />
-          <p>Pictures begin as noise. Every plate states it.</p>
-        </div>
-        <h3>No account. No backend.</h3>
-        <p>The page calls the sampler straight from this machine &mdash; settings, history and pins live in one local slate.</p>
-      </article>
-      <article className="trio__item" data-reveal="fade" data-delay="0.1">
-        <div className="trio__card trio__card--rows" aria-hidden="true">
-          <p className="trio__row"><span className="trio__mark" />Flux &mdash; on</p>
-          <p className="trio__row"><span className="trio__mark trio__mark--off" />Turbo &mdash; off, free tier</p>
-          <p className="trio__row"><span className="trio__mark" />Kontext &mdash; bring your own key</p>
-        </div>
-        <h3>Models, in the open.</h3>
-        <p>Slugs, endpoints and the on/off switch sit in admin &mdash; the truth of what runs, visible on the page.</p>
-      </article>
-      <article className="trio__item" data-reveal="fade" data-delay="0.2">
-        <div className="trio__card trio__card--ink" aria-hidden="true">
-          <span className="trio__chip">RUNS IN STEPS</span>
-          <p className="trio__big">14</p>
-          <p className="trio__bigcap">denoise steps, noise &rarr; plate</p>
-        </div>
-        <h3>A run you can watch.</h3>
-        <p>The stage resolves in visible steps with a typed readout &mdash; you are never handed a finished thing without its history.</p>
-      </article>
     </section>
   );
 }

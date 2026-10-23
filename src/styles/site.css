@@ -69,9 +69,8 @@ html.frame-away .frame__br { translate: 0 260%; }
 .roll > span + span { translate: 0 105%; }
 @media (hover: hover) {
   .roll:hover > span { translate: 0 -105%; }
+  .roll:hover > span + span { translate: 0 0; }
 }
-.roll:hover > span { translate: 0 -105%; }
-.roll:hover > span + span { translate: 0 0; }
 .roll:focus-visible > span { translate: 0 -105%; }
 .roll:focus-visible > span + span { translate: 0 0; }
 .nav .is-current { color: var(--c-fg); }
@@ -261,31 +260,8 @@ html.motion .hero__title { animation: titleResolve 1s cubic-bezier(0.16, 1, 0.3,
 }
 
 /* ---------------------------------------------------------------- the sampler story (landing v3)
-   Grammar borrowed from the reference deck: a color journey (paper — lime — paper — ink),
-   a glass promo card, a mixed-material trio, a dark run panel, capability entries with
-   media, numbered pipeline rows, a truths marquee, one circular exit. */
-
-/* lime interlude: one band where the accent owns the whole field */
-.band {
-  background: var(--c-accent);
-  display: grid; place-items: center;
-  gap: calc(var(--u) * 4);
-  padding: calc(var(--u) * 22) var(--gutter);
-  margin: calc(var(--u) * 10) var(--gutter) 0;
-  border-radius: 0;
-}
-.band__glyph { display: flex; gap: calc(var(--u) * 1.4); }
-.band__glyph span {
-  width: 14px; height: 14px; border-radius: 1px;
-  background: var(--c-fg);
-}
-.band__glyph span:first-child { background: rgba(13, 13, 11, 0.35); }
-.band__glyph span:nth-child(2) { background: rgba(13, 13, 11, 0.55); }
-.band__glyph span:last-child { border: 1.5px solid var(--c-fg); background: transparent; }
-.band__cap {
-  font-family: var(--f-mono); font-size: var(--t-s); letter-spacing: 0.16em;
-  text-transform: uppercase; color: rgba(13, 13, 11, 0.72);
-}
+   Grammar borrowed from the reference deck: a glass promo, a dark run panel, capability
+   entries with media, numbered pipeline rows, a truths marquee, one circular exit. */
 
 /* sampler promo: media with a glass card parked on it */
 .promo { position: relative; padding: calc(var(--u) * 14) var(--gutter) 0; }
@@ -319,43 +295,6 @@ html.motion .hero__title { animation: titleResolve 1s cubic-bezier(0.16, 1, 0.3,
 }
 .promo__card h2 { font-size: var(--t-l); font-weight: 600; letter-spacing: -0.02em; line-height: 1.04; }
 .promo__card .btn { justify-self: start; margin-top: calc(var(--u) * 0.6); }
-
-/* the trio: plain / checklist / ink impact */
-.trio {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: calc(var(--u) * 4) var(--gutter);
-  padding: calc(var(--u) * 16) var(--gutter) calc(var(--u) * 4);
-}
-.trio__item { display: grid; gap: calc(var(--u) * 1.2); align-content: start; }
-.trio__card {
-  border-radius: var(--radius);
-  padding: calc(var(--u) * 2.4);
-  aspect-ratio: 4 / 3;
-  display: grid; align-content: space-between;
-  margin-bottom: calc(var(--u) * 1.2);
-}
-.trio__card--plain { background: var(--c-bg); border: 1px solid var(--c-line); }
-.trio__dot { width: 12px; height: 12px; border-radius: 1px; background: var(--c-accent); }
-.trio__card--plain > p { color: var(--c-muted); font-size: var(--t-s); line-height: 1.5; max-width: 20rem; }
-.trio__card--rows { background: var(--c-bg); border: 1px solid var(--c-line); gap: calc(var(--u) * 1.4); align-content: end; }
-.trio__row {
-  font-family: var(--f-mono); font-size: var(--t-xs); letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--c-fg);
-  display: flex; align-items: center; gap: 0.6em;
-}
-.trio__mark { width: 8px; height: 8px; border-radius: 1px; background: var(--c-accent); flex: 0 0 auto; }
-.trio__mark--off { background: transparent; border: 1px solid var(--c-fg); }
-.trio__card--ink { background: var(--c-fg); color: var(--c-bg); gap: 0; }
-.trio__chip {
-  justify-self: start;
-  font-family: var(--f-mono); font-size: var(--t-xs); letter-spacing: 0.14em;
-  background: var(--c-accent); color: var(--c-fg);
-  padding: 0.45em 0.8em; border-radius: 3px;
-}
-.trio__big { font-size: clamp(5rem, 3rem + 6vw, 9rem); font-weight: 600; line-height: 1; letter-spacing: -0.04em; margin: 0.15em 0; }
-.trio__bigcap { font-family: var(--f-mono); font-size: var(--t-xs); letter-spacing: 0.1em; color: rgba(251, 251, 249, 0.66); }
-.trio__item h3 { font-size: var(--t-m); font-weight: 600; letter-spacing: -0.01em; }
-.trio__item > p { color: var(--c-muted); font-size: var(--t-body); line-height: 1.5; max-width: 26rem; }
 
 /* run panel: the dark statement with one lime exit */
 .run { padding: calc(var(--u) * 14) var(--gutter); }
@@ -477,8 +416,6 @@ html.motion .truths__track { animation: truthsDrift 46s linear infinite; }
   .run__inner { grid-template-columns: 1fr; align-items: start; }
 }
 @media (max-width: 767px) {
-  .trio { grid-template-columns: 1fr; }
-  .trio__card { aspect-ratio: auto; min-height: 220px; }
   .pipe__row { grid-template-columns: 1fr auto; }
   .pipe__line { grid-column: 1 / -1; grid-row: 2; }
   .promo__card { left: var(--gutter); right: var(--gutter); }

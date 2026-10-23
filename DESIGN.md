@@ -114,12 +114,8 @@ marquee, circular exit — all in DeepArt's own voice):
 
   Phones: head stacks, sub full width, CTA left, plate crops 4:3.
   home__strip: the ad slot
-  brand band: full-bleed LIME breath — 4-square noise glyph + "one line → fourteen
-  steps → a picture"
   sampler promo: warm plate media, darkened, with a GLASS card parked on it
   ("Everything happens here." + Open the sampler)
-  trio (plain / checklist / ink): no account · models in the open (Flux on, Turbo
-  off, Kontext BYOK) · "RUNS IN STEPS" 14 impact card
   run panel: dark full-bleed, "From prompt to plate in one line." + repeated-works
   copy + lime exit
   ladder: 3 capability entries (fixed wide stage / seeds that repeat / local by

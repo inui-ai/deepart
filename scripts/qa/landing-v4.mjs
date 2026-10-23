@@ -19,11 +19,10 @@ try {
     [...document.querySelectorAll('main > *')].map((el) => el.getAttribute('aria-label') || el.className.split(' ')[0] || el.tagName),
   );
 
-  out.band = await p.evaluate(() => {
-    const b = document.querySelector('.band');
-    const cap = document.querySelector('.band__cap')?.textContent?.trim();
-    return { lime: b && getComputedStyle(b).backgroundColor, cap };
-  });
+  out.removed = await p.evaluate(() => ({
+    band: !!document.querySelector('.band'),
+    trio: !!document.querySelector('.trio'),
+  }));
 
   out.promo = await p.evaluate(() => {
     const card = document.querySelector('.promo__card');
@@ -35,12 +34,7 @@ try {
     };
   });
 
-  out.trio = await p.evaluate(() => ({
-    cards: document.querySelectorAll('.trio__card').length,
-    big: document.querySelector('.trio__big')?.textContent,
-    rows: document.querySelectorAll('.trio__row').length,
-    ink: (() => { const c = document.querySelector('.trio__card--ink'); return c ? getComputedStyle(c).backgroundColor : null; })(),
-  }));
+  out.trio = null;
 
   out.run = await p.evaluate(() => {
     const r = document.querySelector('.run__inner');
@@ -116,7 +110,7 @@ try {
   out.phone = await p2.evaluate(() => ({
     overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
     promoCardWidth: Math.round(document.querySelector('.promo__card').getBoundingClientRect().width),
-    trioCols: getComputedStyle(document.querySelector('.trio')).gridTemplateColumns.split(' ').length,
+    runCols: getComputedStyle(document.querySelector('.run__inner')).gridTemplateColumns.split(' ').length,
   }));
   out.phone.pageErrors = errs2;
 
