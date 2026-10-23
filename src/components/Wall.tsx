@@ -75,9 +75,10 @@ export function Wall() {
   return (
     <section id="wall" className="wall" aria-labelledby="wall-title" ref={rootRef}>
       <header className="wall__head" data-reveal="up">
-        <h2 id="wall-title" className="wall__title">The wall</h2>
-        <p className="wall__meta" aria-label={`${items.length} plates on the wall`}>
-          <span>{items.length}</span> plates
+        <p className="wall__eyebrow">contact sheet</p>
+        <h2 id="wall-title" className="wall__title">Plates that left the noise.</h2>
+        <p className="wall__index" aria-label={`${items.length} plates on the wall`}>
+          <span>{items.length}</span> plates &middot; seeded &middot; local only
         </p>
       </header>
 
@@ -87,9 +88,9 @@ export function Wall() {
           <a className="link" href="/admin">admin</a>.
         </p>
       ) : (
-        <ul className="wall__grid">
+        <ul className="wall__sheet">
           {items.map((item, i) => (
-            <li key={item.id} className="plate plate--wall" data-resolve>
+            <li key={item.id} className="plate plate--wall wall__cell" data-resolve>
               <button
                 type="button"
                 className="plate__open"
@@ -104,6 +105,7 @@ export function Wall() {
                 </span>
               </button>
               <figcaption className="plate__caption">
+                <p className="plate__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
                 <p className="plate__title">{item.title}</p>
                 <p className="plate__spec">{specOf(item, i)}</p>
               </figcaption>

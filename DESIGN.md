@@ -111,14 +111,13 @@ hero (split frame):
   | OUT OF NOISE.  |  [render, resolves in    ]
   |                |  [on load                ]
   | sub ...        |  [spec line: model·size  ]
-  | [Generate] [Browsing the wall]   |        UTILITY NAV  |
-  | ... [GLance at the immediate ACT]        |
-  | [Generate            ] | [View the wall]
+  | [Generate]                  |            UTILITY NAV      |
 
   Phones: the columns stack with the plate FIRST (poster above type) so the first
   paint and the LCP are the render itself, not the copy.
 
-  corner frame: TL DeepArt - TR Nav (Generate/Wall/Admin) - BL context label - BR action
+  corner frame: TL DeepArt - TR Nav (Generate/Wall/Admin) — the top bar anchors to the
+  page (scrolls away, never prints over content); Menu pill stays fixed bottom-right
   (small screens: top bar + menu overlay)
 gallery (gallery wall):
 

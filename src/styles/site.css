@@ -232,28 +232,76 @@ html.motion .hero__plate[data-resolved='true'] .plate__noise {
 
 /* ---------------------------------------------------------------- the wall */
 
+/* The wall is a contact sheet, not a feed: a 12-column editorial band where each
+   plate claims its own span and a small letterpress offset (a deliberate ladder
+   with voids), and carries an entry number plus its stamped spec row. The rhythm
+   comes from the pattern, not from a masonry packer. */
 .wall { padding: calc(var(--u) * 20) var(--gutter) calc(var(--u) * 14); scroll-margin-top: var(--u); }
-.wall__head {
-  display: flex; justify-content: space-between; align-items: baseline; gap: var(--u);
-  border-bottom: 1px solid var(--c-line); padding-bottom: calc(var(--u) * 2.5);
-  margin-bottom: calc(var(--u) * 6);
+.wall__head { display: grid; gap: calc(var(--u) * 1.6); max-width: 44rem; margin-bottom: calc(var(--u) * 7); }
+.wall__eyebrow {
+  display: flex; align-items: center;
+  font-family: var(--f-mono); font-size: var(--t-s); letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--c-muted);
 }
-.wall__title { font-size: var(--t-l); font-weight: 600; letter-spacing: -0.02em; }
-.wall__meta { font-size: var(--t-s); color: var(--c-muted); }
-.wall__meta span { font-variant-numeric: tabular-nums; color: var(--c-fg); font-weight: 600; }
+.wall__eyebrow::before {
+  content: ''; width: 0.34em; height: 0.34em; border-radius: 1px;
+  background: var(--c-accent); margin-right: 0.65em;
+}
+.wall__title { font-size: clamp(1.7rem, 1.1rem + 2.4vw, 2.6rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.04; }
+.wall__index {
+  max-width: 22rem; border-top: 1px solid var(--c-line); padding-top: calc(var(--u) * 1.2);
+  font-family: var(--f-mono); font-size: var(--t-s); letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--c-muted);
+}
+.wall__index span { color: var(--c-fg); font-weight: 700; font-variant-numeric: tabular-nums; }
 .wall__empty { max-width: 40rem; color: var(--c-muted); }
 
-.wall__grid { columns: 3; column-gap: var(--gutter); margin: 0; padding: 0; list-style: none; }
-.wall__grid .plate--wall { break-inside: avoid; margin-bottom: calc(var(--u) * 5); }
+.wall__sheet {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: calc(var(--u) * 6) var(--gutter); align-items: start;
+  margin: 0; padding: 0; list-style: none;
+}
+.wall__sheet > li:nth-child(4n + 1) { grid-column: 1 / span 5; --dy: 0px; }
+.wall__sheet > li:nth-child(4n + 2) { grid-column: 8 / span 4; --dy: calc(var(--u) * 3); }
+.wall__sheet > li:nth-child(4n + 3) { grid-column: 2 / span 4; --dy: calc(var(--u) * 1.5); }
+.wall__sheet > li:nth-child(4n) { grid-column: 7 / span 5; --dy: calc(var(--u) * -2); }
+.wall__cell {
+  position: relative; translate: 0 var(--dy, 0px);
+  transition: translate 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wall__cell:hover { translate: 0 calc(var(--dy, 0px) - 5px); }
+html:not(.motion) .wall__cell { translate: none; }
+
+/* punch marks: every plate registers the sheet with a small crosshair */
+.wall__cell::before {
+  content: '+'; position: absolute; left: 0; top: -1.15em; z-index: 2;
+  font-family: var(--f-mono); font-size: var(--t-s); line-height: 1;
+  color: var(--c-line);
+}
+/* entry number: the inventory margin of the sheet */
+.plate__num {
+  font-family: var(--f-mono); font-size: var(--t-xs); letter-spacing: 0.12em;
+  color: var(--c-accent); padding-top: calc(var(--u) * 1.5);
+  font-variant-numeric: tabular-nums;
+}
 .plate__open { display: block; width: 100%; padding: 0; }
 @media (hover: hover) {
   .plate--wall .plate__media img { transition: filter 0.6s ease, scale 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
   .plate--wall:hover .plate__media img { scale: 1.02; }
+  .plate--wall:hover .plate__media { outline: 1px solid var(--c-accent); outline-offset: 5px; }
 }
-.plate__caption { padding-top: calc(var(--u) * 1.2); }
+.plate__caption { padding-top: calc(var(--u) * 0.3); }
 .plate__title { font-weight: 500; font-size: var(--t-s); }
-@media (max-width: 1023px) { .wall__grid { columns: 2; } }
-@media (max-width: 639px) { .wall__grid { columns: 1; } }
+@media (max-width: 1023px) {
+  /* tablet: a calmer two-up ladder keeps the sense of placement */
+  .wall__sheet { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: calc(var(--u) * 5) var(--gutter); }
+  .wall__sheet > li:nth-child(n) { grid-column: span 3; --dy: 0px; }
+  .wall__sheet > li:nth-child(2n) { --dy: calc(var(--u) * 2); }
+}
+@media (max-width: 639px) {
+  .wall__sheet > li:nth-child(n) { grid-column: 1 / -1; --dy: 0px; }
+  .wall__cell::before { top: -1.3em; left: 0; }
+}
 
 /* lightbox */
 .lightbox {
