@@ -1,6 +1,7 @@
 'use client';
-// Models admin: name, slug, endpoint template with {prompt} {width} {height} {seed} {model}
-// placeholders, enabled toggle. Templates are what make a request, so they validate.
+// Models admin: name, model id, optional API key, endpoint template with {prompt} {width}
+// {height} {seed} {model} {key} placeholders, enabled toggle. Templates are what make a
+// request, so they validate. Keys stay in this browser and ride inside exports.
 import { useState } from 'react';
 import { mutate, uid, useStore } from '@/lib/store';
 import { toast } from '@/lib/toast';
@@ -8,24 +9,30 @@ import type { Model } from '@/data/site';
 import { AdminField, QuietBtn, Row, Stack, Toggle } from './kit';
 
 const FLUX_T = 'https://image.pollinations.ai/prompt/{prompt}?width={width}&height={height}&seed={seed}&model=flux&nologo=true';
+const TURBO_T = 'https://image.pollinations.ai/prompt/{prompt}?width={width}&height={height}&seed={seed}&model=turbo&token={key}';
 
 export function ModelsAdmin() {
   const s = useStore();
   const [nName, setNName] = useState('');
-  const [nSlug, setNSlug] = useState('');
+  const [nModelId, setNModelId] = useState('flux');
+  const [nKey, setNKey] = useState('');
   const [nEndpoint, setNEndpoint] = useState(FLUX_T);
 
   function add() {
     const name = nName.trim();
-    const slug = nSlug.trim();
-    if (!name || !slug) { toast('Name and slug are both needed.', 'warn'); return; }
+    const modelId = nModelId.trim();
+    if (!name || !modelId) { toast('Name and model id are both needed.', 'warn'); return; }
     if (!nEndpoint.includes('{prompt}')) { toast('The endpoint template must contain {prompt}.', 'error'); return; }
+    if (nEndpoint.includes('{key}') && !nKey.trim())
+      toast('The template calls for a key; you can paste it any time in the installed list.', 'warn');
+    const key = nKey.trim() || undefined;
     const ok = mutate((d) => {
-      d.models.push({ id: `m-${uid()}`, name, slug, endpoint: nEndpoint.trim(), enabled: true });
+      d.models.push({ id: `m-${uid()}`, name, slug: modelId, apiKey: key, endpoint: nEndpoint.trim(), enabled: true });
     });
     if (ok) {
       toast(`Added ${name}.`, 'ok');
-      setNName(''); setNSlug('');
+      setNName(''); setNKey('');
+      setNEndpoint(nEndpoint === TURBO_T ? FLUX_T : nEndpoint);
     } else toast('Added for this visit, but the browser refused to save it.', 'warn');
   }
 
@@ -42,10 +49,20 @@ export function ModelsAdmin() {
         <AdminField label="Name" hint="Shown on the generate page.">
           <input value={nName} onChange={(e) => setNName(e.target.value)} placeholder="Flux Kontext" />
         </AdminField>
-        <AdminField label="Slug" hint="Replaces {model} in the endpoint template.">
-          <input value={nSlug} onChange={(e) => setNSlug(e.target.value)} placeholder="kontext" />
+        <AdminField label="Model id" hint="The id the provider expects; replaces {model} in the template.">
+          <input value={nModelId} onChange={(e) => setNModelId(e.target.value)} placeholder="kontext" />
         </AdminField>
-        <AdminField label="Endpoint template" hint="Placeholders: {prompt} {width} {height} {seed} {model}. The prompt is added URL-escaped.">
+        <AdminField label="API key" hint="Optional. Stored only in this browser; the template uses it through {key}.">
+          <input
+            type="password"
+            autoComplete="off"
+            aria-label="API key"
+            value={nKey}
+            onChange={(e) => setNKey(e.target.value)}
+            placeholder="paste if the provider requires one"
+          />
+        </AdminField>
+        <AdminField label="Endpoint template" hint="Placeholders: {prompt} {width} {height} {seed} {model} {key}. The prompt is added URL-escaped.">
           <textarea className="adm__mono" rows={3} value={nEndpoint} onChange={(e) => setNEndpoint(e.target.value)} />
         </AdminField>
         <div className="adm__actions">
@@ -63,9 +80,18 @@ export function ModelsAdmin() {
             <div className="adm__inputs adm__inputs--model">
               <input value={m.name} aria-label="Model name" onChange={(e) => mutate((d) => { d.models[i].name = e.target.value; })} />
               <div className="adm__modelrow">
-                <input className="adm__mono" value={m.slug} aria-label="Slug" onChange={(e) => mutate((d) => { d.models[i].slug = e.target.value; })} />
+                <input className="adm__mono" value={m.slug} aria-label="Model id" onChange={(e) => mutate((d) => { d.models[i].slug = e.target.value; })} />
                 {m.builtIn ? <span className="chip chip--dim" aria-label="Built in">built in</span> : null}
               </div>
+              <input
+                type="password"
+                autoComplete="off"
+                className="adm__mono"
+                value={m.apiKey ?? ''}
+                aria-label="API key"
+                placeholder={m.endpoint.includes('{key}') ? 'no key set; the template needs one through {key}' : 'none'}
+                onChange={(e) => mutate((d) => { d.models[i].apiKey = e.target.value.trim() || undefined; })}
+              />
               <textarea
                 className="adm__mono"
                 rows={2}
@@ -83,7 +109,7 @@ export function ModelsAdmin() {
           </li>
         ))}
       </ol>
-      <p className="adm__note">Built-in models are Pollinations endpoints; delete is allowed, and Reset on the overview tab brings them back.</p>
+      <p className="adm__note">Built-in models are Pollinations endpoints; delete is allowed, and Reset on the overview tab brings them back. API keys live only in this browser's localStorage and travel inside any export file — keep exports private.</p>
     </Stack>
   );
 }

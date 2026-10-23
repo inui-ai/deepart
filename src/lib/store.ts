@@ -128,6 +128,7 @@ export function buildUrl(m: Model, a: { prompt: string; width: number; height: n
   return m.endpoint
     .replace('{prompt}', encodeURIComponent(a.prompt))
     .replaceAll('{model}', m.slug)
+    .replace('{key}', encodeURIComponent(m.apiKey ?? ''))
     .replace('{width}', String(a.width))
     .replace('{height}', String(a.height))
     .replace('{seed}', String(a.seed));

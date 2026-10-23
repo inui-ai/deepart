@@ -51,6 +51,7 @@ Helpers of the same family: `scripts/lcp-probe.mjs` (LCP candidate trail), `scri
   points canonical, OG and sitemap. Replace with the real domain on deploy, then re-run the
   warmer if the HTML of seeds changed.
 - Renders arrive with a small pollinations.ai watermark bottom-right (free tier; acceptable).
-- The seeded `Turbo` model ships **disabled**: the anonymous tier is Flux-only now. Admins with
-  a paid key can enable it in the Models tab.
+- The seeded `Turbo` model ships **disabled**: the anonymous tier is Flux-only now. With a
+  paid key, paste it into the model's **API key** field in the admin's Models tab; the
+  built-in Turbo template carries `token={key}`. Keys live in localStorage only.
 - Ads are inert by default (an admin pastes a URL or an inline snippet in the Ads tab).

@@ -36,7 +36,8 @@ export type Model = {
   id: string;
   name: string;
   slug: string;
-  endpoint: string; // supports {prompt} {width} {height} {seed} {model}
+  endpoint: string; // supports {prompt} {width} {height} {seed} {model} {key}
+  apiKey?: string; // provider secret, stored locally by the owner's request; template uses {key}
   enabled: boolean;
   builtIn?: boolean;
 };
@@ -96,8 +97,8 @@ const defaultModels: Model[] = [
     id: 'm-turbo',
     name: 'Turbo',
     slug: 'turbo',
-    endpoint: `${POLL}/{prompt}?width={width}&height={height}&seed={seed}&model=turbo`,
-    enabled: false, // the Pollinations anonymous tier is Flux-only now; admins with a paid key can turn this on
+    endpoint: `${POLL}/{prompt}?width={width}&height={height}&seed={seed}&model=turbo&token={key}`,
+    enabled: false, // the Pollinations anonymous tier is Flux-only; with a paid key in the API key field this turns on
     builtIn: true,
   },
 ];
