@@ -62,6 +62,7 @@ const jsonLd = {
         'One prompt, side-by-side renders from every installed image model',
         'Free and unlimited: no login, no account',
         'Built-in free Flux and Turbo models',
+        'Bring your own key: extend it with any OpenAI-compatible images endpoint',
         'Images and exports stay in your browser',
       ],
     },

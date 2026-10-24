@@ -2,7 +2,7 @@
 
 > DeepArt is a browser-native AI image sampler. Write one prompt, pick a model, and watch the render resolve side by side in steps. Free and unlimited, no login, no account: the sampler and every generated image live in the visitor's browser (localStorage), and exports are plain JSON files the visitor keeps.
 
-DeepArt runs entirely client side. Its built-in models are Flux and Turbo, served free through keyless image URLs.
+DeepArt runs entirely client side. Its built-in models are Flux and Turbo, served free through keyless image URLs. It is also extendable: users can bring their own key and point extra model slots at any OpenAI-compatible images endpoint; those keys stay in the browser and ride only the generation they belong to.
 
 ## Pages
 

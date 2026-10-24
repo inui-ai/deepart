@@ -57,9 +57,9 @@ ok('sitemap no hidden route', !sm.toLowerCase().includes('subhan'));
 
 const ltxt = await (await fetch(BASE + '/llms.txt')).text();
 ok('llms.txt served', ltxt.startsWith('# DeepArt') && ltxt.includes('browser-native AI image sampler'));
-ok('llms.txt pitches free unlimited, not keys', ltxt.includes('Free and unlimited') && !ltxt.toLowerCase().includes('api key') && !ltxt.toLowerCase().includes('bring your own'));
+ok('llms.txt pitches free unlimited and honors bring your own key', ltxt.includes('Free and unlimited') && /bring (your|their) own key/i.test(ltxt));
 ok('llms.txt no hidden route', !ltxt.toLowerCase().includes('subhan'));
-ok('schema pitches free unlimited, not keys', JSON.stringify(blocks).includes('Free and unlimited') && !JSON.stringify(blocks).includes('Bring your own key'));
+ok('schema pitches free unlimited and honors bring your own key', JSON.stringify(blocks).includes('Free and unlimited') && JSON.stringify(blocks).includes('Bring your own key'));
 ok('home description pitches free unlimited', home.includes('Free and unlimited, no login'));
 
 const adm = await fetch(BASE + '/subhan');

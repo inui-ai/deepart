@@ -21,7 +21,7 @@ export const site = {
   // localhost fallback shipped canonical links to 127.0.0.1, which quietly unindexes a site.
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://deepart-one.vercel.app',
   description:
-    'DeepArt is a browser-native image sampler: type a few words, pick a model, watch the render resolve. Free and unlimited, no login, no account, everything stays on your machine.',
+    'DeepArt is a browser-native image sampler: type a few words, pick a model, watch it resolve. Free and unlimited, no login, no account. Bring your own key for more; everything stays on your machine.',
   year: new Date().getFullYear(),
 };
 
