@@ -43,6 +43,30 @@ async function b64ToJpegDataUrl(b64: string, maxSide = 1024): Promise<string> {
   return c.toDataURL('image/jpeg', 0.82);
 }
 
+// Compat providers name their answer fields all sorts of ways: data[0].url / b64_json is the
+// OpenAI shape, others ship images[], artifacts[].base64, inlineData.base64, output urls…
+// Deep-scan the answer for the first thing that looks like an image and use it.
+function findImage(v: unknown, depth = 0): string {
+  if (depth > 5 || v == null) return '';
+  if (typeof v === 'string') {
+    const t = v.trim();
+    if (/^data:image\/[a-z+.-]+;base64,/i.test(t)) return t;
+    if (/^https:\/\//i.test(t)) return /\.(png|jpe?g|webp|gif)(\?|#|$)/i.test(t) || /image|img|render|generation/i.test(t) ? t : '';
+    const bare = t.replace(/\s+/g, '');
+    if (bare.length > 512 && /^[A-Za-z0-9+/=_-]+$/.test(bare)) return `data:image/png;base64,${bare}`;
+    return '';
+  }
+  if (Array.isArray(v)) {
+    for (const x of v) { const f = findImage(x, depth + 1); if (f) return f; }
+    return '';
+  }
+  if (typeof v === 'object') {
+    for (const x of Object.values(v as Record<string, unknown>)) { const f = findImage(x, depth + 1); if (f) return f; }
+    return '';
+  }
+  return '';
+}
+
 export function Generate() {
   const s = useStore();
   const models = s.models.filter((m) => m.enabled);
@@ -163,10 +187,19 @@ export function Generate() {
         const e = (await res.json().catch(() => null)) as { error?: { message?: string } } | null;
         throw new Error(e?.error?.message ?? `HTTP ${res.status}`);
       }
-      const j = (await res.json()) as { data?: Array<{ url?: string; b64_json?: string }> };
-      const item = j.data?.[0];
+      const j = (await res.json().catch(() => null)) as
+        | { data?: Array<{ url?: string; b64_json?: string }> }
+        | Record<string, unknown>
+        | null;
+      const item = (j as { data?: Array<{ url?: string; b64_json?: string }> })?.data?.[0];
       let url = item?.url ?? '';
       if (item?.b64_json) url = await b64ToJpegDataUrl(item.b64_json);
+      if (!url && j) url = findImage(j); // tolerant pass for compat answer shapes
+      if (url.startsWith('data:image/') && !url.startsWith('data:image/jpeg')) {
+        const bare = url.slice(url.indexOf(',') + 1); // a found b64: downscale for the storage quota
+        url = await b64ToJpegDataUrl(bare);
+      }
+      if (/^https?:\/\//.test(url)) url = `/api/img?url=${encodeURIComponent(url)}`;
       if (!url) throw new Error('the answer carried no image');
       r.url = url;
       setActive({ ...r });

@@ -4,7 +4,9 @@
 // can point a model at any OpenAI-compatible host, so a static CSP allowlist and
 // per-provider CORS can never cover them all; through the relay the browser only ever
 // talks to its own origin. Nothing is stored, nothing is logged; the key travels inside
-// the request body for the two hops it must, then dies with the response.
+// the request body for the two hops it must, then dies with the response. Guards are
+// https-only plus a private/loopback host blocklist, not path-based: compat name their
+// image paths too differently for one pattern to hold.
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -56,9 +58,10 @@ export async function POST(req: NextRequest) {
   if (blockedHost(u.hostname)) {
     return NextResponse.json({ error: { message: 'That host is not reachable from here.' } }, { status: 400 });
   }
-  if (!u.pathname.toLowerCase().includes('generations')) {
-    return NextResponse.json({ error: { message: 'Only images/generations endpoints are relayed.' } }, { status: 400 });
-  }
+  // Note: no path restriction beyond the host guard — compat providers name their
+  // images paths all sorts of ways, and the earlier strict 'generations' check hung up
+  // legitimate endpoints. Abuse surface stays narrow: https only, public hosts only,
+  // one JSON POST with caller-supplied credentials, 55 s ceiling.
   if (!/^\d{3,4}x\d{3,4}$/.test(size)) {
     return NextResponse.json({ error: { message: 'The size must be like 1024x1024.' } }, { status: 400 });
   }

@@ -168,5 +168,59 @@ const eb = await fetch('http://127.0.0.1:4400/api/gen', {
 });
 console.log('E. ssrf guard on loopback endpoint:', eb.status, eb.status === 400 ? '(blocked)' : '(NOT BLOCKED)');
 
+// E3. a non-generations image path must pass the guard and reach the provider stage:
+// api.github.com answers a stable 404, that is proof the relay stopped rejecting paths.
+const eg = await fetch('http://127.0.0.1:4400/api/gen', {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({ endpoint: 'https://api.github.com/v1/custom-image', model: 'm', prompt: 'a probe', size: '1024x1024' }),
+});
+const egj = await eg.json().catch(() => ({}));
+const egm = typeof egj?.error?.message === 'string' ? egj.error.message : '';
+console.log('E3. non-generations path relayed:', eg.status, '| reaches provider:', eg.status !== 400, '| msg:', egm.slice(0, 40));
+
+// F. /api/img guards: http refused, loopback refused, a real https image relays.
+const f1 = await fetch('http://127.0.0.1:4400/api/img?url=http://example.com/a.png');
+const f2 = await fetch('http://127.0.0.1:4400/api/img?url=https%3A%2F%2F127.0.0.1%2Fa.png');
+let f3try = 'no network';
+try {
+  const f3 = await fetch('http://127.0.0.1:4400/api/img?url=' + encodeURIComponent('https://picsum.photos/64/64'));
+  f3try = f3.ok ? `200 image (${(await f3.arrayBuffer()).byteLength}b)` : String(f3.status);
+} catch { /* offline: the guard checks above still hold */ }
+console.log('F. img relay: http:', f1.status, '| loopback:', f2.status, '| https picsum:', f3try);
+
+// G. a hosted-url answer renders through /api/img (mock provider + mocked img relay).
+const w = await browser.newPage({ viewport: { width: 1445, height: 912 } });
+w.on('pageerror', (e) => errs.push('imgroute:' + String(e).slice(0, 100)));
+await w.route('**/api/img*', async (route) => {
+  await route.fulfill({ status: 200, contentType: 'image/png', body: Buffer.from(PNG_8x8, 'base64') });
+});
+await w.route('**/api/gen', async (route) => {
+  await route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify({ data: [{ url: 'https://api.mockprov.test/img/123.png' }] }),
+  });
+});
+await w.goto('http://127.0.0.1:4400/generate', { waitUntil: 'load' });
+await w.waitForTimeout(3500);
+await w.evaluate(() => {
+  const s = JSON.parse(localStorage.getItem('deepart:v1'));
+  const gi = s.models.find((m) => m.slug === 'gpt-image-1');
+  gi.kind = 'openai'; gi.apiKey = 'TEST-KEY-123'; gi.enabled = true;
+  s.models.forEach((m) => { if (m.slug !== 'gpt-image-1') m.enabled = false; });
+  localStorage.setItem('deepart:v1', JSON.stringify(s));
+});
+await w.reload({ waitUntil: 'load' });
+await w.waitForTimeout(3500);
+await w.fill('textarea', 'a dragon in lime light');
+await w.evaluate(() => document.querySelector('form.gen__controls button[type="submit"]').click());
+const wDone = await w.waitForFunction(() => {
+  const i = document.querySelector('.gen__stage img');
+  return i && i.src.includes('/api/img?url=');
+}, { timeout: 60000 }).then(() => true).catch(() => false);
+const wStat = await w.evaluate(() => document.querySelector('form.gen__controls button[type="submit"]')?.textContent ?? '');
+console.log('G. hosted url -> /api/img:', wDone, '| submit label:', wStat.trim().slice(0, 12));
+
 console.log('pageerrors:', errs.length, JSON.stringify(errs.slice(0, 4)));
 await browser.close();

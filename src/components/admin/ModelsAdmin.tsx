@@ -32,7 +32,8 @@ export function ModelsAdmin() {
     if (nKind === 'url' && !nEndpoint.includes('{prompt}')) { toast('The endpoint template must contain {prompt}.', 'error'); return; }
     if (nKind === 'openai') {
       if (!/^https?:\/\//.test(nEndpoint.trim())) { toast('The endpoint must be a full URL, for example https://api.provider.com/v1/images/generations.', 'error'); return; }
-      if (!nKey.trim()) toast('OpenAI-compatible endpoints send the key as a Bearer header; paste it any time in the installed list.', 'warn');
+      if (nEndpoint.includes('{prompt}')) toast('The endpoint still holds {prompt}; OpenAI-kind posts the prompt inside the JSON body. Check the Kind or the URL.', 'warn');
+      else if (!nKey.trim()) toast('OpenAI-compatible endpoints send the key as a Bearer header; paste it any time in the installed list.', 'warn');
     } else if (nEndpoint.includes('{key}') && !nKey.trim()) {
       toast('The template calls for a key; you can paste it any time in the installed list.', 'warn');
     }
