@@ -84,7 +84,7 @@ export function ModelsAdmin() {
         <AdminField
           label="Endpoint template"
           hint={nKind === 'openai'
-            ? 'Full https POST URL (…/v1/images/generations). Requests ride the same-origin /api/gen relay, so any provider works.'
+            ? 'Full https POST URL, or a base like https://kenari.id/v1 (the /images/generations tail is added for you).'
             : 'Placeholders: {prompt} {width} {height} {seed} {model} {key}. The prompt is added URL-escaped.'}
         >
           <textarea className="adm__mono" rows={3} value={nEndpoint} onChange={(e) => setNEndpoint(e.target.value)} />

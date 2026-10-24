@@ -64,6 +64,9 @@ Helpers of the same family: `scripts/lcp-probe.mjs` (LCP candidate trail), `scri
   (401 invalid key, 429 rate limits…) surface verbatim in the sampler. Answers in
   `b64_json` are canvas-downscaled to a locally stored JPEG; answers that arrive as hosted
   URLs are piped same-origin through `/api/img` so the strict `img-src` allowlist holds.
+  SDK-style base URLs work: `https://kenari.id/v1` gets the `/images/generations` tail
+  appended for you. Provider-side hiccups that answer HTTP 200 with an `error` object in
+  the body (kenari does this on long renders) surface as the model's own error message too.
   The relay is stateless, guards against private/loopback targets (https only, no path
   pattern — compat name their image paths too differently), and never logs. A
   `gpt-image-1` built-in ships off; paste an OpenAI key to switch it on.

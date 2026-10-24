@@ -55,6 +55,11 @@ export async function POST(req: NextRequest) {
   if (!u) {
     return NextResponse.json({ error: { message: 'The endpoint must be a full https URL.' } }, { status: 400 });
   }
+  // SDK-style base URL: https://kenari.id/v1 means the images path, exactly like the
+  // OpenAI SDK appends it. Other paths pass through untouched.
+  if (/^\/v\d+\/?$/.test(u.pathname)) {
+    u.pathname = u.pathname.replace(/\/$/, '') + '/images/generations';
+  }
   if (blockedHost(u.hostname)) {
     return NextResponse.json({ error: { message: 'That host is not reachable from here.' } }, { status: 400 });
   }

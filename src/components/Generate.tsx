@@ -188,10 +188,14 @@ export function Generate() {
         throw new Error(e?.error?.message ?? `HTTP ${res.status}`);
       }
       const j = (await res.json().catch(() => null)) as
-        | { data?: Array<{ url?: string; b64_json?: string }> }
+        | { data?: Array<{ url?: string; b64_json?: string }>; error?: { message?: string } }
         | Record<string, unknown>
         | null;
+      // kenari-style quirk: a failure after the first 45 s arrives as HTTP 200 with an
+      // error object in the body. Surface that message instead of "no image".
+      const bodyErr = (j as { error?: { message?: string } } | null)?.error?.message;
       const item = (j as { data?: Array<{ url?: string; b64_json?: string }> })?.data?.[0];
+      if (bodyErr && !item) throw new Error(bodyErr);
       let url = item?.url ?? '';
       if (item?.b64_json) url = await b64ToJpegDataUrl(item.b64_json);
       if (!url && j) url = findImage(j); // tolerant pass for compat answer shapes

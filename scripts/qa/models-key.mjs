@@ -179,6 +179,17 @@ const egj = await eg.json().catch(() => ({}));
 const egm = typeof egj?.error?.message === 'string' ? egj.error.message : '';
 console.log('E3. non-generations path relayed:', eg.status, '| reaches provider:', eg.status !== 400, '| msg:', egm.slice(0, 40));
 
+// E4. SDK-style base URL: /v1 gains the images tail and reaches the real route
+// (a 401 with OpenAI's own message proves the path; a 404 would mean the tail missed).
+const e4 = await fetch('http://127.0.0.1:4400/api/gen', {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({ endpoint: 'https://api.openai.com/v1', apiKey: 'sk-invalid-local-probe', model: 'gpt-image-1', prompt: 'a probe lighthouse', size: '1024x1024' }),
+});
+const e4j = await e4.json().catch(() => ({}));
+const e4m = typeof e4j?.error?.message === 'string' ? e4j.error.message : '';
+console.log('E4. base url https://api.openai.com/v1 ->', e4.status, '| 401 pass-through:', e4.status === 401, '| msg:', e4m.slice(0, 40));
+
 // F. /api/img guards: http refused, loopback refused, a real https image relays.
 const f1 = await fetch('http://127.0.0.1:4400/api/img?url=http://example.com/a.png');
 const f2 = await fetch('http://127.0.0.1:4400/api/img?url=https%3A%2F%2F127.0.0.1%2Fa.png');
@@ -221,6 +232,35 @@ const wDone = await w.waitForFunction(() => {
 }, { timeout: 60000 }).then(() => true).catch(() => false);
 const wStat = await w.evaluate(() => document.querySelector('form.gen__controls button[type="submit"]')?.textContent ?? '');
 console.log('G. hosted url -> /api/img:', wDone, '| submit label:', wStat.trim().slice(0, 12));
+
+// H. kenari quirk: HTTP 200 whose body carries an error object must stop the ticker and
+// raise the truthful message instead of hanging as "sampling".
+const h = await browser.newPage({ viewport: { width: 1445, height: 912 } });
+h.on('pageerror', (e) => errs.push('errquirk:' + String(e).slice(0, 100)));
+await h.route('**/api/gen', async (route) => {
+  await route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify({ error: { message: 'upstream failed after the first 45 s' } }),
+  });
+});
+await h.goto('http://127.0.0.1:4400/generate', { waitUntil: 'load' });
+await h.waitForTimeout(3500);
+await h.evaluate(() => {
+  const s = JSON.parse(localStorage.getItem('deepart:v1'));
+  const gi = s.models.find((m) => m.slug === 'gpt-image-1');
+  gi.kind = 'openai'; gi.apiKey = 'TEST-KEY-123'; gi.enabled = true;
+  s.models.forEach((m) => { if (m.slug !== 'gpt-image-1') m.enabled = false; });
+  localStorage.setItem('deepart:v1', JSON.stringify(s));
+});
+await h.reload({ waitUntil: 'load' });
+await h.waitForTimeout(3500);
+await h.fill('textarea', 'a dragon in fog');
+await h.evaluate(() => document.querySelector('form.gen__controls button[type="submit"]').click());
+const hBad = await h.waitForFunction(() => document.querySelector('.gen__hint--bad') !== null, { timeout: 30000 }).then(() => true).catch(() => false);
+const hText = await h.evaluate(() => document.querySelector('.gen__hint--bad')?.textContent ?? '');
+const hToast = await h.evaluate(() => document.querySelector('.toast--error')?.textContent ?? '');
+console.log('H. 200-with-error surfaced as a failure:', hBad, '| hint shows error state:', hText.trim().slice(0, 40), '| toast:', JSON.stringify(hToast.slice(0, 60)));
 
 console.log('pageerrors:', errs.length, JSON.stringify(errs.slice(0, 4)));
 await browser.close();
