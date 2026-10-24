@@ -80,8 +80,8 @@ Helpers of the same family: `scripts/lcp-probe.mjs` (LCP candidate trail), `scri
   keywords, canonical resolved against `site.url`, Open Graph + Twitter card over
   `public/og.png`, and a `WebSite` + `WebApplication` JSON-LD graph (free,
   browser-native, feature list).
-- `src/app/page.tsx` ships a visible FAQ whose text and `FAQPage` JSON-LD are generated
-  from one array, so the schema and the on-page copy cannot drift.
+- `src/app/page.tsx`: the landing (hero + gallery deck). The metadata surface lives in
+  the root layout, so the pages stay copy-only.
 - `src/app/robots.ts` allows a full crawl and names the AI answer engines explicitly
   (GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, PerplexityBot, Perplexity-User,
   Google-Extended, Applebot-Extended, Bytespider, CCBot) plus host + sitemap directives.

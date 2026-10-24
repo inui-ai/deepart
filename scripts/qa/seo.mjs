@@ -27,22 +27,18 @@ ok('og:image absolute', grab(home, /property="og:image" content="([^"]+)"/) === 
 ok('twitter card large', home.includes('name="twitter:card" content="summary_large_image"'));
 ok('keywords present', home.includes('name="keywords"'));
 
-// json-ld: parse every block, collect graph types
+// json-ld: parse the layout graph block, collect types
 const blocks = [...home.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
   .map((m) => JSON.parse(m[1].replace(/\\u003c/g, '<')));
 const types = new Set(blocks.flatMap((j) => (j['@graph'] ?? [j]).map((n) => n['@type'])));
-ok('ld+json blocks parse', blocks.length >= 2, blocks.map((b) => b['@type']).join('+'));
+ok('ld+json parses', blocks.length >= 1, blocks.map((b) => b['@type']).join('+'));
 ok('WebSite + WebApplication graph', types.has('WebSite') && types.has('WebApplication'));
-ok('FAQPage schema on landing', types.has('FAQPage'));
 
-// visible FAQ (answer-engine fodder), leak check
-ok('faq visible', ['Questions people ask DeepArt', 'Is DeepArt free?', 'Which image models can it use?'].every((t) => home.includes(t)));
-ok('faq mentions a real compat provider', home.includes('https://kenari.id/v1'));
+// leak check
 ok('no hidden route leaked on landing', !home.includes('/subhan'));
 
 const gen = await (await fetch(BASE + '/generate')).text();
 ok('generate canonical', grab(gen, /rel="canonical" href="([^"]+)"/) === `https://${HOST}/generate`);
-ok('no FAQPage schema on generate', !/<script type="application\/ld\+json">[\s\S]*?"@type":"FAQPage"/.test(gen));
 ok('generate page leaked nothing', !gen.includes('/subhan'));
 
 const robots = await (await fetch(BASE + '/robots.txt')).text();
