@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Generate',
   description:
-    'Prompt in, image out: watch the sampler resolve your render in steps, download it, or hang it on the wall. Models are user-configurable in admin.',
+    'Prompt in, image out: watch the sampler resolve your render in steps, download it, or hang it on the wall. Free and unlimited, no login.',
 };
 
 export default function GeneratePage() {

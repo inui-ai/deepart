@@ -60,10 +60,9 @@ const jsonLd = {
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       featureList: [
         'One prompt, side-by-side renders from every installed image model',
-        'Runs entirely in the browser: no login, no account',
+        'Free and unlimited: no login, no account',
         'Built-in free Flux and Turbo models',
-        'Bring your own key: any OpenAI-compatible images endpoint works',
-        'Images stay in the browser; exports are local JSON files',
+        'Images and exports stay in your browser',
       ],
     },
   ],
