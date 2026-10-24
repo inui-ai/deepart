@@ -100,9 +100,9 @@ export function ModelsAdmin() {
       <h3 className="adm__h3">Installed ({s.models.length})</h3>
       <ol className="adm__list">
         {s.models.map((m, i) => (
-          <li key={m.id} className={`adm__item ${!m.enabled ? 'adm__item--off' : ''}`}>
+          <li key={m.id} className={`adm__item adm__item--model ${!m.enabled ? 'adm__item--off' : ''}`}>
             <div className="adm__inputs adm__inputs--model">
-              <input value={m.name} aria-label="Model name" onChange={(e) => mutate((d) => { d.models[i].name = e.target.value; })} />
+              <input className="adm__name" value={m.name} aria-label="Model name" onChange={(e) => mutate((d) => { d.models[i].name = e.target.value; })} />
               <div className="adm__modelrow">
                 <input className="adm__mono" value={m.slug} aria-label="Model id" onChange={(e) => mutate((d) => { d.models[i].slug = e.target.value; })} />
                 <select
@@ -119,14 +119,14 @@ export function ModelsAdmin() {
               <input
                 type="password"
                 autoComplete="off"
-                className="adm__mono"
+                className="adm__mono adm__key"
                 value={m.apiKey ?? ''}
                 aria-label="API key"
                 placeholder={m.kind === 'openai' ? 'OpenAI-compat rides the key as Bearer' : m.endpoint.includes('{key}') ? 'no key set; the template needs one through {key}' : 'none'}
                 onChange={(e) => mutate((d) => { d.models[i].apiKey = e.target.value.trim() || undefined; })}
               />
               <textarea
-                className="adm__mono"
+                className="adm__mono adm__endpoint"
                 rows={2}
                 value={m.endpoint}
                 aria-label="Endpoint template"

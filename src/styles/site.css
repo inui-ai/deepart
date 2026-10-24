@@ -686,9 +686,23 @@ html.motion .truths__track { animation: truthsDrift 46s linear infinite; }
 .adm__item--off { opacity: 0.55; }
 .adm__thumb { width: 96px; height: 96px; object-fit: cover; border-radius: calc(var(--radius) - 4px); background: #ECECE6; }
 .adm__inputs { display: grid; gap: calc(var(--u) * 1); min-width: 0; }
-.adm__inputs--model { grid-template-columns: minmax(0, 10rem) minmax(0, 1fr); }
-.adm__modelrow { display: flex; gap: calc(var(--u) * 1); align-items: center; }
-.adm__modelrow input { width: 8rem; }
+/* gallery/ads rows keep [thumb | inputs | btns]; model rows have no thumb, so they
+   carry their own shape: name · model id (+kind) · API key on one line, the endpoint
+   spanning below, and the buttons right at their natural width. */
+.adm__item--model { grid-template-columns: minmax(0, 1fr) auto; }
+.adm__inputs--model {
+  grid-template-columns: minmax(7rem, 11rem) minmax(0, 1fr) minmax(9rem, 14rem);
+  grid-template-areas:
+    "name modelid key"
+    "endpoint endpoint endpoint";
+  align-items: start;
+}
+.adm__name { grid-area: name; }
+.adm__modelrow { grid-area: modelid; display: flex; gap: calc(var(--u) * 1); align-items: center; flex-wrap: wrap; }
+.adm__key { grid-area: key; }
+.adm__endpoint { grid-area: endpoint; }
+.adm__modelrow input { flex: 1 1 9rem; width: auto; min-width: 5rem; }
+.adm__modelrow select { flex: 0 0 auto; width: auto; min-width: 0; }
 .adm__itembtns { display: flex; flex-direction: column; gap: calc(var(--u) * 0.8); align-items: stretch; }
 .adm__itembtns .adm__btn, .adm__itembtns .chip { text-align: center; }
 .adm__mono { font-family: var(--f-mono); font-size: var(--t-xs); letter-spacing: 0.01em; }
@@ -696,8 +710,12 @@ html.motion .truths__track { animation: truthsDrift 46s linear infinite; }
 
 @media (max-width: 719px) {
   .adm__item { grid-template-columns: 1fr; }
+  .adm__item--model { grid-template-columns: 1fr; }
   .adm__itembtns { flex-direction: row; }
-  .adm__inputs--model { grid-template-columns: 1fr; }
+  .adm__inputs--model {
+    grid-template-columns: 1fr;
+    grid-template-areas: "name" "modelid" "key" "endpoint";
+  }
 }
 
 /* ---------------------------------------------------------------- 404 */
