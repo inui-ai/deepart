@@ -1,6 +1,7 @@
 // models-key: admin model form shows key/endpoint/model-id; a stored key flows into the
 // render request URL (token=...) and respects the CSP (no console errors). Section D runs
-// the OpenAI-compatible kind against a mocked /v1/images/generations (POST + Bearer, b64).
+// the OpenAI-compatible kind against the /api/gen relay (mocked network layer), section E
+// hits the real local relay (referencing api.openai.com with an invalid key for a 401).
 import { chromium } from 'playwright';
 import zlib from 'node:zlib';
 
@@ -105,25 +106,22 @@ const o = await browser.newPage({ viewport: { width: 1445, height: 912 } });
 o.on('pageerror', (e) => errs.push('openai:' + String(e).slice(0, 100)));
 const conErrs = [];
 o.on('console', (m) => { if (m.type() === 'error') conErrs.push(String(m.text()).slice(0, 90)); });
-const post = { auth: null, model: null, size: null, prompt: null, respFormat: null };
-await o.route('https://api.openai.com/v1/images/generations', async (route) => {
+const post = { path: null, endpoint: null, key: null, model: null, size: null, prompt: null };
+await o.route('**/api/gen', async (route) => {
   const req = route.request();
   if (req.method() === 'OPTIONS') {
-    await route.fulfill({
-      status: 204,
-      headers: { 'access-control-allow-origin': '*', 'access-control-allow-methods': 'POST, OPTIONS', 'access-control-allow-headers': 'authorization, content-type' },
-    });
+    await route.fulfill({ status: 204, headers: { 'access-control-allow-origin': '*', 'access-control-allow-methods': 'POST, OPTIONS', 'access-control-allow-headers': 'authorization, content-type' } });
     return;
   }
-  post.auth = await req.headerValue('authorization');
+  post.path = new URL(req.url()).pathname;
   const body = req.postDataJSON();
+  post.endpoint = body.endpoint;
+  post.key = body.apiKey;
   post.model = body.model;
   post.size = body.size;
   post.prompt = typeof body.prompt === 'string' && body.prompt.length > 3;
-  post.respFormat = body.response_format ?? null;
   await route.fulfill({
     status: 200,
-    headers: { 'access-control-allow-origin': '*' },
     contentType: 'application/json',
     body: JSON.stringify({ data: [{ b64_json: PNG_8x8 }] }),
   });
@@ -147,11 +145,28 @@ const oDone = await o.waitForFunction(() => {
 }, { timeout: 60000 }).then(() => true).catch(() => false);
 const oSpec = await o.evaluate(() => document.querySelector('.plate__spec.gen__readout')?.textContent ?? '');
 const oLen = await o.evaluate(() => document.querySelector('.gen__stage img')?.src.length ?? 0);
-console.log('D. openai POST authorization:', post.auth);
-console.log('D. post body (model/size/prompt/response_format):', JSON.stringify({ model: post.model, size: post.size, prompt: post.prompt, respFormat: post.respFormat }));
+console.log('D. relay request path:', post.path);
+console.log('D. relay body (endpoint/key/model/size/prompt):', JSON.stringify({ endpoint: post.endpoint, key: post.key, model: post.model, size: post.size, prompt: post.prompt }));
 console.log('D. b64 -> jpeg data URL done:', oDone, '| data url len:', oLen, '| spec:', oSpec.slice(0, 36));
 console.log('D. console errors (CSP etc):', conErrs.length, JSON.stringify(conErrs.slice(0, 4)));
 await o.screenshot({ path: '.shots/feature/models-openai.png' });
+
+// E. the real relay: same-origin handler calls the provider server-side; an invalid key
+// must surface the provider's OWN status and message (401 with OpenAI's error text).
+const er = await fetch('http://127.0.0.1:4400/api/gen', {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({ endpoint: 'https://api.openai.com/v1/images/generations', apiKey: 'sk-invalid-local-probe', model: 'gpt-image-1', prompt: 'a probe lighthouse', size: '1024x1024' }),
+});
+const ej = await er.json().catch(() => ({}));
+const eMsg = typeof ej?.error?.message === 'string' ? ej.error.message.slice(0, 80) : '';
+console.log('E. live relay status:', er.status, '| message:', eMsg);
+const eb = await fetch('http://127.0.0.1:4400/api/gen', {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({ endpoint: 'http://127.0.0.1:9/v1/images/generations', model: 'm', prompt: 'x', size: '1024x1024' }),
+});
+console.log('E. ssrf guard on loopback endpoint:', eb.status, eb.status === 400 ? '(blocked)' : '(NOT BLOCKED)');
 
 console.log('pageerrors:', errs.length, JSON.stringify(errs.slice(0, 4)));
 await browser.close();

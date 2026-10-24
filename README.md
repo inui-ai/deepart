@@ -56,9 +56,13 @@ Helpers of the same family: `scripts/lcp-probe.mjs` (LCP candidate trail), `scri
   built-in Turbo template carries `token={key}`. Keys live in localStorage only.
 - Models have two kinds (admin → Models → Kind). **URL template (GET)** renders the built
   URL straight into the stage image. **OpenAI images (JSON POST)** calls any
-  OpenAI-compatible `/v1/images/generations` endpoint with `Authorization: Bearer <key>`
-  and body `{ model, prompt, size }`; hosted-URL answers work, while `b64_json` answers are
-  canvas-downscaled to a locally stored JPEG. A `gpt-image-1` built-in ships off; paste an
-  OpenAI key to switch it on. Other compat providers need their host allowlisted in
-  `next.config.ts` (the CSP `connect-src`).
+  OpenAI-compatible `/images/generations` endpoint through the site's own same-origin
+  relay `src/app/api/gen/route.ts`: the browser posts `{ endpoint, apiKey, model, prompt,
+  size }` to `/api/gen`, the handler adds the Bearer header server-side and relays the
+  provider's JSON and status. This keeps the browser on the same origin for every
+  provider (no CSP `connect-src` edits, no per-provider CORS issues), and provider errors
+  (401 invalid key, 429 rate limits…) surface verbatim in the sampler. `b64_json` answers
+  are canvas-downscaled to a locally stored JPEG; the relay is stateless, keeps best-effort
+  SSRF guards (https only, no private/loopback hosts, generations paths only), and never
+  logs. A `gpt-image-1` built-in ships off; paste an OpenAI key to switch it on.
 - Ads are inert by default (an admin pastes a URL or an inline snippet in the Ads tab).

@@ -132,9 +132,10 @@ export function Generate() {
     });
   }
 
-  // OpenAI-compatible images API: POST JSON with a Bearer key, then feed the returned
-  // picture (hosted URL or b64_json) to the same stage path. Failure paths here must stop
-  // the ticker themselves — an <img> never fires onerror for a POST that never started.
+  // OpenAI-compatible images API via the same-origin /api/gen relay: any https provider
+  // works without CSP or CORS edits, and provider errors (401, 429…) pass through with
+  // their real message. Failure paths here must stop the ticker themselves — an <img>
+  // never fires onerror for a POST that never produced a picture.
   async function runOpenAi(m: Model, usePrompt: string, fill?: Run) {
     const w = fill?.w ?? size.w;
     const h = fill?.h ?? size.h;
@@ -147,19 +148,21 @@ export function Generate() {
       gsap.set(imgRef.current, { filter: isMobile() ? 'none' : 'blur(5px)', scale: 1.02 });
     }
     try {
-      const res = await fetch(m.endpoint, {
+      const res = await fetch('/api/gen', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${m.apiKey ?? ''}` },
+        headers: { 'Content-Type': 'application/json' }, // the key rides in the body, relay-side
         body: JSON.stringify({
+          endpoint: m.endpoint,
+          apiKey: m.apiKey ?? '',
           model: m.slug,
           prompt: usePrompt,
           size: openAiSize(w, h),
-          // dall-e models return hosted URLs on a foreign domain; ask for b64 where legal.
-          // gpt-image-1 rejects response_format and always answers b64 on its own.
-          ...(m.slug.startsWith('dall-e') ? { response_format: 'b64_json' } : {}),
         }),
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) {
+        const e = (await res.json().catch(() => null)) as { error?: { message?: string } } | null;
+        throw new Error(e?.error?.message ?? `HTTP ${res.status}`);
+      }
       const j = (await res.json()) as { data?: Array<{ url?: string; b64_json?: string }> };
       const item = j.data?.[0];
       let url = item?.url ?? '';
