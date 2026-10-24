@@ -770,6 +770,17 @@ html.motion .truths__track { animation: truthsDrift 46s linear infinite; }
 
 .noscript { padding: var(--u) var(--gutter) calc(var(--u) * 8); color: var(--c-fg); }
 
+/* landing faq: server-rendered Q&A in ink hairlines. The text is visible to crawlers
+   and answer engines with or without JS; details/summary only trims the read. */
+.faq { display: grid; gap: calc(var(--u) * 1.2); max-width: 62rem; padding: 0 var(--gutter); margin-top: calc(var(--u) * 6); }
+.faq__h { font-size: var(--t-m); font-weight: 600; letter-spacing: -0.02em; margin: 0 0 calc(var(--u) * 0.4); }
+.faq__item { border: 1px solid var(--c-line); border-radius: var(--radius); padding: calc(var(--u) * 1.1) calc(var(--u) * 1.5); }
+.faq__item summary { cursor: pointer; font-weight: 500; font-size: var(--t-body); list-style: none; display: flex; justify-content: space-between; align-items: baseline; gap: calc(var(--u) * 1.5); }
+.faq__item summary::-webkit-details-marker { display: none; }
+.faq__item summary::after { content: '+'; font-family: var(--f-mono); color: var(--c-muted); flex: 0 0 auto; }
+.faq__item[open] summary::after { content: '\2212'; }
+.faq__item p { margin: calc(var(--u) * 0.9) 0 0; color: var(--c-muted); font-size: var(--t-body); line-height: 1.55; max-width: 58ch; }
+
 /* loader face */
 .loader__name { font-weight: 600; font-size: var(--t-l); letter-spacing: -0.03em; }
 .loader__count { font-size: var(--t-s); letter-spacing: 0.06em; }

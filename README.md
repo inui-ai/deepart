@@ -47,9 +47,11 @@ Helpers of the same family: `scripts/lcp-probe.mjs` (LCP candidate trail), `scri
 
 ## Placeholders & assumptions
 
-- `site.url` in `src/data/site.ts` is the **ship host placeholder** (`http://127.0.0.1:4400`) —
-  points canonical, OG and sitemap. Replace with the real domain on deploy, then re-run the
-  warmer if the HTML of seeds changed.
+- `site.url` in `src/data/site.ts` defaults to the deployed hosts
+  (`https://deepart-one.vercel.app`) and points canonical, OG, sitemap and robots at it.
+  Set `NEXT_PUBLIC_SITE_URL` to move the whole SEO surface to a custom domain without
+  code edits. (An older local-host fallback quietly shipped canonical links to
+  `127.0.0.1`, which un-indexes a site; QA asserts the production hosts instead.)
 - Renders arrive with a small pollinations.ai watermark bottom-right (free tier; acceptable).
 - The seeded `Turbo` model ships **disabled**: the anonymous tier is Flux-only now. With a
   paid key, paste it into the model's **API key** field in the admin's Models tab; the
@@ -71,3 +73,21 @@ Helpers of the same family: `scripts/lcp-probe.mjs` (LCP candidate trail), `scri
   pattern — compat name their image paths too differently), and never logs. A
   `gpt-image-1` built-in ships off; paste an OpenAI key to switch it on.
 - Ads are inert by default (an admin pastes a URL or an inline snippet in the Ads tab).
+
+## Discoverability (Google + AI answer engines)
+
+- `src/app/layout.tsx` carries the metadata surface: title template, description,
+  keywords, canonical resolved against `site.url`, Open Graph + Twitter card over
+  `public/og.png`, and a `WebSite` + `WebApplication` JSON-LD graph (free,
+  browser-native, feature list).
+- `src/app/page.tsx` ships a visible FAQ whose text and `FAQPage` JSON-LD are generated
+  from one array, so the schema and the on-page copy cannot drift.
+- `src/app/robots.ts` allows a full crawl and names the AI answer engines explicitly
+  (GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, PerplexityBot, Perplexity-User,
+  Google-Extended, Applebot-Extended, Bytespider, CCBot) plus host + sitemap directives.
+- `src/app/sitemap.ts` lists `/` and `/generate` with a real `lastModified`.
+- `public/llms.txt` is a plain-language brief for LLM answer engines (the emerging
+  llms.txt convention, served as raw text).
+- After a deploy lands, submit `https://…/sitemap.xml` once in Google Search Console and
+  Bing Webmaster; robots.txt and the sitemap carry the rest. Answer engines pick sites
+  up on their own crawl cycle, usually later than Google.

@@ -15,9 +15,11 @@ export function pollUrl(prompt: string, seed: number, w: number, h: number, mode
 export const site = {
   name: 'DeepArt',
   action: 'Generate',
-  // ship host: canonical, OG and sitemap. Set NEXT_PUBLIC_SITE_URL on the host
-  // (e.g. the Vercel domain) to override; the local default keeps QA honest.
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'http://127.0.0.1:4400',
+  // ship host: canonical, OG and sitemap resolve against it. Defaults to the deployed
+  // hosts so the live site ships absolute URLs that Google can actually index; a single
+  // NEXT_PUBLIC_SITE_URL (a custom domain, say) overrides without code edits. The earlier
+  // localhost fallback shipped canonical links to 127.0.0.1, which quietly unindexes a site.
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://deepart-one.vercel.app',
   description:
     'DeepArt is a browser-native image sampler: type a few words, pick a model, watch the render resolve. No login, no account, everything stays on your machine.',
   year: new Date().getFullYear(),
@@ -137,7 +139,7 @@ const seed: Store = {
   ads: [
     {
       id: 'ad-sample',
-      headline: 'This spot is yours. Add an ad in /subhan and it lives here.',
+      headline: 'This spot is yours. Your ad could live here.',
       link: '#',
       imageUrl: pollUrl('wide minimal abstract poster, lime and ink flat shapes, print grain', 4277, 1200, 260),
       placement: 'home-strip',

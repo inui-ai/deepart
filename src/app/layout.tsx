@@ -13,10 +13,18 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: `${site.name} | local image sampler`, template: `%s | ${site.name}` },
   description: site.description,
+  keywords: [
+    'AI image sampler', 'text to image', 'compare AI image models', 'browser AI art',
+    'flux', 'turbo', 'openai images api', 'openai-compatible image generator', 'no login image generator',
+  ],
+  applicationName: site.name,
+  category: 'AI image generation',
   alternates: { canonical: './' },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
   openGraph: {
     type: 'website',
     siteName: site.name,
+    description: site.description,
     images: ['/og.png'],
   },
   twitter: { card: 'summary_large_image' },
@@ -29,15 +37,36 @@ const flags = `document.documentElement.classList.add('js');if(!matchMedia('(pre
 // Must match the exact URL the hero <img> requests (same string from site.ts).
 const heroPreload = HERO_URL;
 
+// Three graphs: the site, the application, and (on the landing) the FAQ. Visible text
+// doubles as the schema content, which keeps the structured data honest for crawlers
+// and answer engines instead of stuffing invisible claims.
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'WebApplication',
-  name: site.name,
-  applicationCategory: 'DesignApplication',
-  operatingSystem: 'Web',
-  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-  description: site.description,
-  url: site.url,
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      name: site.name,
+      url: site.url,
+      description: site.description,
+    },
+    {
+      '@type': 'WebApplication',
+      name: site.name,
+      applicationCategory: 'DesignApplication',
+      operatingSystem: 'Any, in a web browser',
+      url: site.url,
+      description: site.description,
+      isAccessibleForFree: true,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      featureList: [
+        'One prompt, side-by-side renders from every installed image model',
+        'Runs entirely in the browser: no login, no account',
+        'Built-in free Flux and Turbo models',
+        'Bring your own key: any OpenAI-compatible images endpoint works',
+        'Images stay in the browser; exports are local JSON files',
+      ],
+    },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
